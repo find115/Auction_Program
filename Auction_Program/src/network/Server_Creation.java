@@ -1,8 +1,8 @@
 package network;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,14 +15,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * 서버생성을 위한 클래스
- * 서버 시작 메소드
- * 서버 종료 메소드
- * 입출력 스트림
- * @author 김준선
- */
-public class Server_Creation{
+public class Server_Creation {
+	private static Object lock = new Object();//동기화를 위해 생성함.
 	
 	private List<Connection> list = new ArrayList<>();
 	private ServerSocket serverSocket;
@@ -37,48 +31,16 @@ public class Server_Creation{
 	
 	FileIo file = new FileIo();
 	
+	Bids bids = new Bids();
+	
+	Member mb = new Member();
+		
 	private List<Item> itemList = new ArrayList<>();//아이템을 받을 리스트
 	
-	public List<Item> getItemList() {
-		return itemList;
-	}
+	private List<Member> memberList = new ArrayList<>();//회원정보 리스트
+	//이거랑 이밑에 is는 synck를 위해서 만듬.
+	private boolean isRegistration;
 	
-	public int itemInfo() {
-		return itemList.size();
-		
-	}
-	
-	public String getC_Address() {
-		return c_Address;
-	}
-	public void setC_Address(String c_Address) {
-		this.c_Address = c_Address;
-	}
-	
-	public List<Connection> getList() {
-		return list;
-	}
-
-	public void setList(List<Connection> list) {
-		this.list = list;
-	}
-
-	public ServerSocket getServerSocket() {
-		return serverSocket;
-	}
-
-	public void setServerSocket(ServerSocket serverSocket) {
-		this.serverSocket = serverSocket;
-	}
-	
-	public boolean notFlag() {
-		flag = false;
-		return flag;
-	}
-	
-	public boolean getFalg() {
-		return flag;
-	}
 //	서버시작 메소드
 	public void startServer() {
 		Runnable runServer = new Runnable() {
@@ -88,38 +50,51 @@ public class Server_Creation{
 					Socket socket;
 					try {
 						socket = serverSocket.accept();
-					
+						
+						System.out.println("스타트 서버 런어블 실행됨");
+						
 						Connection cn = new Connection();
-						cn.out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
-						cn.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+						cn.out = new ObjectOutputStream(socket.getOutputStream());
+						cn.in = new ObjectInputStream(socket.getInputStream());
 						cn.setDaemon(true);
 						cn.start();
 						list.add(cn);
 						setC_Address("[클라이언트 접속] : "+socket.getRemoteSocketAddress());
-//						System.out.println(getC_Address());
 						
-//						접속해제한 클라이언트를 확인하는 기능 이부분 다시확인
-//						if(cn.in.readLine().equals("종료")) {
-//							System.out.println(socket.getRemoteSocketAddress()+"님 퇴장");
-//							list.remove(cn);
-//						}
 						
-//						object를 입력받는 스트림
-						InputStream is = socket.getInputStream();
-					    ObjectInputStream ois = new ObjectInputStream(is);
-					    item = (Item)ois.readObject();
-					    itemList.add(item);
-					    
-					    file.fileWriter(itemList);
-					    
-//					    돌려보내는 test코드
-					    itemList = file.fileReader(itemList);
-					    ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-					    oos.writeObject(itemList);
-					    oos.flush();
-					    
+//					 	member.list파일에서 memberList를 읽어온다.
+//						만약 member.list에 아무것도 저장되있지 않으면 ArrayList를 생성해서 저장한다.
+						memberList = file.fileReader_Member(memberList);
+						if(memberList == null) {
+							memberList = new ArrayList<>();
+							file.fileWriter_Member(memberList);
+						}
+						
+						itemList = file.fileReader(itemList);//이거 반드시 해줘야함.
+						if(itemList == null) {
+							itemList = new ArrayList<>();
+							file.fileWriter(itemList);
+						}
+						
+//						작업 넘버링을 입력받음
+						int work_Number = (int) cn.in.readObject();
+						if(work_Number!=function.BID) {
+							function.work(work_Number, socket, itemList, cn.in, cn.out, memberList, list);
+							System.out.println(work_Number);
+							
+							socket.close();
+						}
+						else {
+							synchronized(lock) {
+								itemList = file.fileReader(itemList);
+								function.bid(work_Number, socket, itemList, cn.in, cn.out, memberList, list);
+								System.out.println("입찰완료"+work_Number);
+								
+								socket.close();
+							}
+						}
 					}
-					catch (/*IOException*/Exception e) {
+					catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
@@ -128,26 +103,15 @@ public class Server_Creation{
 		executorService.submit(runServer);
 	}
 	
-//	//	서버 종료 메소드
-//	public void stopServer() {
-//		try {
-//			for(int i=0; i<list.size(); i++) {
-//				list.get(i).socket.close();
-//				list.remove(i);
-//			}
-//			serverSocket.close();
-//			notFlag();
-//		}catch(Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-	
 //	서버 종료 메소드
 	public void stopServer() {
 		try {
 			for(int i=0; i<list.size(); i++) {
-				list.get(i).socket.close();
-				list.remove(i);
+				if(list.get(i).socket != null) {
+					list.get(i).socket.close();
+					list.remove(i);
+				}
+				else list.remove(i);
 			}
 			if(serverSocket != null && serverSocket.isClosed()) {
 				serverSocket.close();
@@ -160,8 +124,6 @@ public class Server_Creation{
 			e.printStackTrace();
 		}
 	}
-	
-	
 //	생성자
 	public Server_Creation() {
 		try {
@@ -170,44 +132,39 @@ public class Server_Creation{
 			e.printStackTrace();
 		}
 	}
-//	커넥션 클래스
-	private class Connection extends Thread{
-		Socket socket;
-		PrintWriter out;
-		BufferedReader in;
-		
-		public void send(String text) {
-			out.println(text);
-			out.flush();
-		}
-		
-		public void broadcast(String text) {
-			for(Connection cn : list) {
-				cn.send(text);
-			}
-		}
-		
-		@Override
-		public void run() {
-			try {
-				while(true) {
-//					String line = in.readLine();
-//					if(line.equals("10")) {
-						//10 = 상품등록
-//						itemList.add(function.addItem(serverSocket, socket));
-//					}	
-				
-				     
-//					socket = serverSocket.accept();
-//				    InputStream is = socket.getInputStream();
-//				    ObjectInputStream ois = new ObjectInputStream(is);
-//				    item = (Item)ois.readObject();
-//				    itemList.add(item);
-				}
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
+//	getter, setter
+	public boolean isRegistration() {
+		return isRegistration;
+	}
+	public List<Item> getItemList() {
+		return itemList;
+	}
+	public int itemInfo() {
+		return itemList.size();
+	}
+	public String getC_Address() {
+		return c_Address;
+	}
+	public void setC_Address(String c_Address) {
+		this.c_Address = c_Address;
+	}
+	public List<Connection> getList() {
+		return list;
+	}
+	public void setList(List<Connection> list) {
+		this.list = list;
+	}
+	public ServerSocket getServerSocket() {
+		return serverSocket;
+	}
+	public void setServerSocket(ServerSocket serverSocket) {
+		this.serverSocket = serverSocket;
+	}
+	public boolean notFlag() {
+		flag = false;
+		return flag;
+	}
+	public boolean getFalg() {
+		return flag;
 	}
 }

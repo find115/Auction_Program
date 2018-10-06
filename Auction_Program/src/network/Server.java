@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
+
 /**
  * 서버를 실행시키는 클래스
  * 서버 GUI
@@ -36,15 +37,23 @@ class Server extends JFrame{
 	private Font font = new Font("굴림",Font.PLAIN, 25);
 	private String ipAdd = "초기값";
 	private boolean flag = true;
-	
+//	접속가능한 클라이언트 수(1)
 	ExecutorService executorService = Executors.newFixedThreadPool(1);
-//	static ExecutorService executorService = Executors.newFixedThreadPool(2);
 	
 	static Server_Creation server = new Server_Creation();
-	Server_Function function = new Server_Function();
+	
 	//아이템 리스트 test코드
 	Item item = new Item();
 	List<Item> itemList = new ArrayList<>();
+	
+	private int count = 0;//log를 찍기 위해 필요한 변수
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
+
 	
 	public String getIpAdd(){
 		return ipAdd; 
@@ -88,20 +97,29 @@ class Server extends JFrame{
 		Runnable c_Add = new Runnable() {
 			@Override
 			public void run() {
-				int count = 0;
 				while(true) {
-						serverLog();
-//						System.out.println(String.valueOf(server.itemInfo()+"\n"));
-//						System.out.println(server.getList().get(0)+"\n");
-						
+						serverLog(getCount());
 //						서버 itemList에 갱신된 itemList를 넣어주는 기능
-						itemList = server.getItemList();
-						if(server.getList().size()!=count) {
-							area.append("현재 접속자 수 : "+server.getList().size()+"명\n");
-							count = server.getList().size();
-						}
+//						itemList = server.getItemList();
+						
+						
+//						if(server.getList().size()!=count) {
+//							area.append("현재 접속자 수 : "+server.getList().size()+"명\n");
+//							count = server.getList().size();
+//						}
+						
+						
+//						System.out.println(server.function.getActivity());
+						
+						
+//						area.append(server.getAa().toString()+"\n");
+//						System.out.println(server.getAa());
+//						area.setCaretPosition(area.getDocument().getLength());//자동 스크롤  
+//						area.append("~~~~~~\n");
+						
+						
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(100);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -112,26 +130,32 @@ class Server extends JFrame{
 		executorService.submit(c_Add);
 	}
 	
-	private void serverLog() {
-		if(!getIpAdd().equals(server.getC_Address())) {
-			area.append(server.getC_Address()+"\n");
-			setIpAdd(server.getC_Address());
-			area.setCaretPosition(area.getDocument().getLength());//자동 스크롤  
-		}
+//	원래 접속자수를 찍으려고 했으나 한번 접속후 끊어 버리는 방식이라 구지 필요 없을 것 같다.
+//	private void serverLog() {
+//		if(!getIpAdd().equals(server.getC_Address())) {
+//			area.append(server.getC_Address()+"\n");
+//			setIpAdd(server.getC_Address());
+//			area.setCaretPosition(area.getDocument().getLength());//자동 스크롤  
+//		}
+//	}
+	
+	private void serverLog(int count) {
+			if(server.function.getActivity() != count) {
+//				count = server.function.getActivity();
+				setCount(server.function.getActivity());
+				area.append(server.function.getServerLog().toString()+"\n");
+				area.setCaretPosition(area.getDocument().getLength());//자동 스크롤  
+			}
 	}
+	
 	
 	private void event() {
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		finish.addActionListener(e->{
-//			server.notFlag();
-//			area.append(String.valueOf(server.getFalg()));//flag값 test코드
-//			server.stopServer();
 			flag = false;
 			executorService.shutdown();
 			server.stopServer();
-//			executorService.shutdown();
-//			server.executorService.shutdown();
 			System.exit(0);
 		});
 	}
@@ -162,20 +186,4 @@ class Server extends JFrame{
 		frame.setVisible(true);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
