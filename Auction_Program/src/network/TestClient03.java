@@ -78,8 +78,8 @@ public class TestClient03 extends JFrame implements Runnable{
 		
 //		상품 등록		
 
-		Date start  = new Date();
-		Date finish = new Date();
+//		Date start  = new Date();
+//		Date finish = new Date();
 //		Format n = new SimpleDateFormat("y-MM-dd E HH:mm:ss");
 //		try {
 //			finish = (Date) n.parseObject("2020-10-01 월 01:41:30");
