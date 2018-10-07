@@ -60,7 +60,7 @@ public class TestClient03 extends JFrame implements Runnable{
 		
 		InetAddress inet = null;
 		 try {
-			 inet = InetAddress.getByName("localhost"); //자기 자신
+			 inet = InetAddress.getByName("192.168.8.115"); //자기 자신
 		 }catch(Exception e) {
 			 e.printStackTrace();
 		 }
@@ -95,17 +95,19 @@ public class TestClient03 extends JFrame implements Runnable{
 		
 		
 		
-//		socket = function.socket_Creation(inet, port);
 //		새로고침
-//		function = function.refresh_Client(socket);
-//		itemList = function.getItemList();
-//		serverTime = function.getReceiveDate();
-//		Format format = new SimpleDateFormat("y-MM-dd E HH:mm:ss");
-//		System.out.println("서버시간 = "+format.format(serverTime));
-//		try {
-//			socket.close();
-//		}catch(Exception e) {
-//			e.printStackTrace();
+//		for(int i=0; i<15; i++) {
+//			socket = function.socket_Creation(inet, port);
+//			function = function.refresh_Client(socket);
+//			itemList = function.getItemList();
+//			serverTime = function.getReceiveDate();
+//			Format format = new SimpleDateFormat("y-MM-dd E HH:mm:ss");
+//			System.out.println("서버시간 = "+format.format(serverTime));
+//			try {
+//				socket.close();
+//			}catch(Exception e) {
+//				e.printStackTrace();
+//			}
 //		}
 //	  	List<Item>에서 ImageIcon을 꺼내와서 JLabel에 찍어보는 기능
 //		ImageIcon뿐만 아니라 다른 정보도 다 꺼낼 수 있음.

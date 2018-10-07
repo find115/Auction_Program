@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,17 +26,25 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.JTextPane;
 
-public class Menu extends JFrame{
+public class Menu extends JFrame implements ActionListener{
 	//	컴포넌트 배치용 공간
 	Enrollment enr = new Enrollment();
 //	Rightdisplay right = new Rightdisplay();
 	private Container con;
 	private JTextField textField = new JTextField();
-	private int count;
+	private int search_count;
+	private int count_page;
+	private int count_max;
+	private int count_least=1;
 	
-	private int pageSize = 200;					//데이터 크기
-	private int save_page = pageSize;			//데이터 저장소
-	private int page_end;						//마지막 페이지
+	private List<Integer> dataSize = new ArrayList<Integer>();					//데이터 크기
+	private int end_data;			//마지막 데이터 값
+	private int page_number = 1;	//페이지 번호 값
+	private int page;				//페이지 값
+	private int total_page;			//총 페이지 값
+	private int start_page;			//시작 페이지 값
+	private int center_page;		//중간 페이지 값
+	private int end_page;			//마지막 페이지 값
 	
 //	private JPanel main_Board = new JPanel();
 	
@@ -52,6 +62,13 @@ public class Menu extends JFrame{
 	private JPanel main_Board = new JPanel();
 	
 	private JPanel[] panel_3 = new JPanel[5];	//main_Board에 패널 생성 크기
+	
+	//카테고리 버튼 생성
+	private JButton button_1 = new JButton("모자");
+	private JButton button_2 = new JButton("상의");
+	private JButton button_3 = new JButton("하의");
+	private JButton button_4 = new JButton("신발");
+	private JButton button_5 = new JButton("외투");
 	
 	//데이터 패널에 들어가는 라벨 값
 	private JLabel lblNewLabel_1 = null;
@@ -122,10 +139,10 @@ public class Menu extends JFrame{
 		//검색 조회 서버에 저장되어 있는 해당 list 값
 		lookup.addActionListener(e->{
 			List<String> list = new ArrayList<>();
-			count = 0;
+			search_count = 0;
 			for(int i=0; i < list.size(); i++) {
 				if(list.get(i).equals(textField.getText())) {
-					count++;
+					search_count++;
 				}
 			}
 			Descending descending = new Descending();
@@ -167,25 +184,26 @@ public class Menu extends JFrame{
 		contents.setBounds(31, 30, 143, 30);
 		panel_contents.add(contents);
 		
-		JButton button_1 = new JButton("모자");
 		button_1.setBounds(31, 102, 143, 45);
 		panel_contents.add(button_1);
 		
-		JButton button_2 = new JButton("상의");
 		button_2.setBounds(31, 249, 143, 45);
 		panel_contents.add(button_2);
 		
-		JButton button_3 = new JButton("하의");
 		button_3.setBounds(31, 396, 143, 45);
 		panel_contents.add(button_3);
 		
-		JButton button_4 = new JButton("신발");
 		button_4.setBounds(31, 543, 143, 45);
 		panel_contents.add(button_4);
 		
-		JButton button_5 = new JButton("외투");
 		button_5.setBounds(31, 690, 143, 45);
 		panel_contents.add(button_5);
+		
+		button_1.addActionListener(this);
+		button_2.addActionListener(this);
+		button_3.addActionListener(this);
+		button_4.addActionListener(this);
+		button_5.addActionListener(this);
 		
 		//버튼 font
 		button_1.setFont(font_2);
@@ -202,7 +220,7 @@ public class Menu extends JFrame{
 		this.getContentPane().add(main_Board);						//삭제
 		main_Board.setLayout(null);					//삭제
 		
-		result.setText("검색 결과 : " + count);
+		result.setText("검색 결과 : " + Integer.toString(dataSize.size())+"개가 확인 되었습니다.");
 		result.setBounds(290, 0, 367, 37);
 		result.setEditable(false);
 		main_Board.add(result);						//this
@@ -212,7 +230,7 @@ public class Menu extends JFrame{
 		this.getContentPane().add(board_Page);
 		board_Page.setLayout(new GridLayout(1, 5, 0, 0));
 		
-		a = new JButton("1"); //Integer.toString(++page_end) - 페이지 사이즈 값 지정
+		a = new JButton(Integer.toString(page_number)); //Integer.toString(++page_end) - 페이지 사이즈 값 지정
 		b = new JButton("2");
 		c = new JButton("3");
 		d = new JButton("4");
@@ -546,8 +564,39 @@ public class Menu extends JFrame{
 		previous_Page.setLayout(new GridLayout(1, 0, 0, 0));
 
 		previous_Page.add(previous_Button);
-		previous_Button.addActionListener(e1 -> {
-			// 이전 페이지 버튼 액션
+		previous_Button.addActionListener(event -> {
+			int number = 5;
+			a.setEnabled(true);
+			b.setEnabled(true);
+			c.setEnabled(true);
+			d.setEnabled(true);
+			e.setEnabled(true);
+			if(event.getSource() == previous_Button) {
+				if(total_page + 5 >= start_page) {
+					total_page = start_page;
+				}else {
+					total_page += 5;
+				}
+				count_page--;
+				if(count_page >= count_least) {
+					a.setText(null); b.setText(null); 
+					c.setText(null); d.setText(null); 
+					e.setText(null); 
+					page_number = (count_page * number) - 4; // 1페이지 - 6페이지 - 11페이지 ...
+					a.setText(Integer.toString(page_number));
+					page_number = (count_page * number) - 3; // 2페이지 - 7페이지 - 12페이지 ...
+					b.setText(Integer.toString(page_number));
+					page_number = (count_page * number) - 2; // 3페이지 - 8페이지 - 13페이지 ...
+					c.setText(Integer.toString(page_number));
+					page_number = (count_page * number) - 1; // 4페이지 - 9페이지 - 14페이지 ...
+					d.setText(Integer.toString(page_number));
+					page_number = (count_page * number); // 5페이지 - 10페이지 - 15페이지 ...
+					e.setText(Integer.toString(page_number));
+				}else if(count_page < count_least) {
+					JOptionPane.showMessageDialog(null, "더 이상 페이지가 없습니다.", "경고 !", JOptionPane.WARNING_MESSAGE);
+					count_page++;
+				}
+			}
 		});
 
 		next_Page.setBorder(border);
@@ -556,81 +605,189 @@ public class Menu extends JFrame{
 		next_Page.setLayout(new GridLayout(1, 0, 0, 0));
 
 		next_Page.add(next_Button);
-		next_Button.addActionListener(e2 -> {
-			int next_sum = 5;
-			double sum = ((((double)save_page)/25)-(save_page/25));
-				if(save_page > 25) {
-					if((int) Math.round((save_page/25)+0.5) > 2) {
-					for(int z = 1; z <= 5; z++) {			
-						page_end++;
-						String next = Integer.toString(page_end);
-						if(Integer.parseInt(a.getText())+next_sum == page_end) {	
-							a.setText(next);
-						}if(Integer.parseInt(b.getText())+next_sum == page_end) {
-							b.setText(next);
-						}if(Integer.parseInt(c.getText())+next_sum == page_end) {
-							c.setText(next);
-						}if(Integer.parseInt(d.getText())+next_sum == page_end) {
-							d.setText(next);
-						}if(Integer.parseInt(e.getText())+next_sum == page_end) {
-							e.setText(next);
-						}
-					}
-					//현재 페이지가 5페이지 이하의 값인 페이지 계산 (예 : 1페이지 or 1~2페이지 or 1~3페이지 or 1~4페이지)
-				}else if(sum*100/100.0 >= 0.04 && sum*100/100.0 < 0.8) {
-						int gut = (int) Math.round(((sum*10)+0.1));
-						for(int z = 1; z <= (int) Math.round(gut/2+0.5); z++) {	
-							page_end++;
-							String next = Integer.toString(page_end);
-							switch(z) {
-							case 1 : a.setText(next);
-							b.setText(""); b.setEnabled(false);
-							c.setText(""); c.setEnabled(false);
-							d.setText(""); d.setEnabled(false);
-							e.setText(""); e.setEnabled(false);
+		next_Button.addActionListener(event -> {
+			int number = 5;
+			if (event.getSource() == next_Button) {
+
+				if (total_page - 5 < 0) {
+					total_page = 0;
+				} else {
+					total_page -= 5;
+				}
+
+				if (end_page > 0) {
+					count_max = center_page + 1;
+				} else {
+					count_max = center_page;
+				}
+				count_page++;
+				System.out.println(total_page);
+				// 중간 페이지 값 구하기
+				if (count_page < count_max || (end_page == 0 && count_page == count_max)) { // center
+					page_number = (count_page * number) - 4; // 1페이지 - 6페이지 - 11페이지 ...
+					a.setText(Integer.toString(page_number));
+					page_number = (count_page * number) - 3; // 2페이지 - 7페이지 - 12페이지 ...
+					b.setText(Integer.toString(page_number));
+					page_number = (count_page * number) - 2; // 3페이지 - 8페이지 - 13페이지 ...
+					c.setText(Integer.toString(page_number));
+					page_number = (count_page * number) - 1; // 4페이지 - 9페이지 - 14페이지 ...
+					d.setText(Integer.toString(page_number));
+					page_number = (count_page * number); // 5페이지 - 10페이지 - 15페이지 ...
+					e.setText(Integer.toString(page_number));
+
+				} else if (count_page > count_max) { //맥시멈 카운터보다 카운터가 높으면 경고 메세지 + 페이지 카운트 -1 감소
+					JOptionPane.showMessageDialog(null, "더 이상 페이지가 없습니다.", "경고 !", JOptionPane.WARNING_MESSAGE);
+					count_page--;
+				}
+				if (count_page == count_max) { // 카운트 최대 값
+					System.out.println(count_page);
+					System.out.println(count_max);
+					System.out.println(end_page);
+					for (int i = 0; i < end_page; i++) { // 마지막 페이지 값 계산 (마지막 페이지 번호 버튼 생성)
+						switch (i) {
+						case 0:
+							page_number = (count_page * number) - 4; // 1페이지 - 6페이지 - 11페이지 ...
+							a.setText(Integer.toString(page_number));
+							b.setText(null);
+							b.setEnabled(false);
+							c.setText(null);
+							c.setEnabled(false);
+							d.setText(null);
+							d.setEnabled(false);
+							e.setText(null);
+							e.setEnabled(false);
 							break;
-							case 2 : b.setText(next);
-							c.setText(""); c.setEnabled(false);
-							d.setText(""); d.setEnabled(false);
-							e.setText(""); e.setEnabled(false);
+						case 1:
+							page_number = (count_page * number) - 3; // 2페이지 - 7페이지 - 12페이지 ...
+							b.setEnabled(true);
+							b.setText(Integer.toString(page_number));
+							c.setText(null);
+							c.setEnabled(false);
+							d.setText(null);
+							d.setEnabled(false);
+							e.setText(null);
+							e.setEnabled(false);
 							break;
-							case 3 : c.setText(next);
-							d.setText(""); d.setEnabled(false);
-							e.setText(""); e.setEnabled(false);
+						case 2:
+							page_number = (count_page * number) - 2; // 3페이지 - 8페이지 - 13페이지 ...
+							c.setEnabled(true);
+							c.setText(Integer.toString(page_number));
+							d.setText(null);
+							d.setEnabled(false);
+							e.setText(null);
+							e.setEnabled(false);
 							break;
-							case 4 : d.setText(next);
-							e.setText(""); e.setEnabled(false);
+						case 3:
+							page_number = (count_page * number) - 1; // 4페이지 - 9페이지 - 14페이지 ...
+							d.setEnabled(true);
+							d.setText(Integer.toString(page_number));
+							e.setText(null);
+							e.setEnabled(false);
 							break;
-							}
+						case 4:
+							page_number = (count_page * number); // 5페이지 - 10페이지 - 15페이지 ...
+							e.setEnabled(true);
+							e.setText(Integer.toString(page_number));
+							break;
 						}
 					}
 				}
-				else if(25 >= save_page && pageSize > 25){
-					System.out.println("마지막페이지추가 && 데이터가 21 ~ 25 이하 일때");
-					if(sum*100/100.0 >= 0.8 && sum <= 1) {
-						for(int z = 1; z <= 5; z++) {			
-							page_end++;
-							String next = Integer.toString(page_end);
-							if(Integer.parseInt(a.getText())+next_sum == page_end) {	
-								a.setText(next);
-							}if(Integer.parseInt(b.getText())+next_sum == page_end) {
-								b.setText(next);
-							}if(Integer.parseInt(c.getText())+next_sum == page_end) {
-								c.setText(next);
-							}if(Integer.parseInt(d.getText())+next_sum == page_end) {
-								d.setText(next);
-							}if(Integer.parseInt(e.getText())+next_sum == page_end) {
-								e.setText(next);
-							}
-						}
-					}
-				}
-			
-			save_page -= 25;
-			if(save_page <= 0){
-				JOptionPane.showMessageDialog(null, "더 이상 페이지가 없습니다.", 
-						"경고 !", JOptionPane.WARNING_MESSAGE);
 			}
 		});
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		int number = 5;						//페이지 계산 고정 값
+		if (event.getSource() == button_1 || event.getSource() == button_2 || event.getSource() == button_3
+				|| event.getSource() == button_4 || event.getSource() == button_5) {
+			a.setText(null); a.setEnabled(true);
+			b.setText(null); b.setEnabled(true);
+			c.setText(null); c.setEnabled(true);
+			d.setText(null); d.setEnabled(true);
+			e.setText(null); e.setEnabled(true);
+			
+			//현재 데이터 값 = 26
+			page = (dataSize.size()/5);			//페이지 값
+			start_page = 0;						//첫 페이지 초기값
+			center_page = 0;					//중간 페이지 초기값
+			end_page = 0;						//마지막 페이지 초기값
+			end_data = dataSize.size()%5;		//마지막 페이지 데이터 값
+
+			//페이지 값
+			if(end_data > 0) {					//마지막 페이지 값의 데이터 존재 참 거짓 판별
+				total_page = page + 1;			//페이지 값 + 1 = 총페이지 값;
+				start_page = total_page;		//첫 페이지 설정 값
+				center_page = total_page/5;     //중간 페이지 설정 값
+				end_page = total_page%5;		//마지막 페이지 설정 값
+			}else {
+				total_page = page;
+				start_page = total_page;		
+				center_page = total_page/5;
+				end_page = total_page%5;
+			}
+			//첫 페이지 값 5페이지 이하의 값인지 구분 
+			if(start_page <= 0) {
+				JOptionPane.showMessageDialog(null, "페이지가 없습니다.", 
+						"경고 !", JOptionPane.WARNING_MESSAGE);
+				a.setText(null); a.setEnabled(false);
+				b.setText(null); b.setEnabled(false);
+				c.setText(null); c.setEnabled(false);
+				d.setText(null); d.setEnabled(false);
+				e.setText(null); e.setEnabled(false);
+			}else if(start_page <= 5) {
+				//첫 페이지 값 계산
+				count_page=1;
+				for(int i=1; i<=start_page; i++) {
+					switch(i) {
+					case 1 : page_number=(count_page*number)-4;		//1페이지 - 6페이지 - 11페이지 ...
+					a.setText(Integer.toString(page_number));
+					b.setText(null); b.setEnabled(false);
+					c.setText(null); c.setEnabled(false);
+					d.setText(null); d.setEnabled(false);
+					e.setText(null); e.setEnabled(false);
+					break;
+					case 2 : page_number=(count_page*number)-3;		//2페이지 - 7페이지 - 12페이지 ...
+					b.setEnabled(true);
+					b.setText(Integer.toString(page_number));
+					c.setText(null); c.setEnabled(false);
+					d.setText(null); d.setEnabled(false);
+					e.setText(null); e.setEnabled(false);
+					break;
+					case 3 : page_number=(count_page*number)-2;		//3페이지 - 8페이지 - 13페이지 ...
+					c.setEnabled(true);
+					c.setText(Integer.toString(page_number));
+					d.setText(null); d.setEnabled(false);
+					e.setText(null); e.setEnabled(false);
+					break;
+					case 4 : page_number=(count_page*number)-1;		//4페이지 - 9페이지 - 14페이지 ...
+					d.setEnabled(true);
+					d.setText(Integer.toString(page_number));
+					e.setText(null); e.setEnabled(false);
+					break;
+					case 5 : page_number=(count_page*number);		//5페이지 - 10페이지 - 15페이지 ...
+					e.setEnabled(true);
+					e.setText(Integer.toString(page_number));
+					break;
+					}
+				}
+				
+//				start_page -= 5;
+			}else{
+				//start_page 값이 6이상의 값일때
+				//다음 페이지 액션 이벤트
+				count_page=1;
+				page_number=(count_page*number)-4;		//1페이지 - 6페이지 - 11페이지 ...
+				a.setText(Integer.toString(page_number));
+				page_number=(count_page*number)-3;		//2페이지 - 7페이지 - 12페이지 ...
+				b.setText(Integer.toString(page_number));
+				page_number=(count_page*number)-2;		//3페이지 - 8페이지 - 13페이지 ...
+				c.setText(Integer.toString(page_number));
+				page_number=(count_page*number)-1;		//4페이지 - 9페이지 - 14페이지 ...
+				d.setText(Integer.toString(page_number));
+				page_number=(count_page*number);		//5페이지 - 10페이지 - 15페이지 ...
+				e.setText(Integer.toString(page_number));
+			}
+		}
 	}
 }
