@@ -112,8 +112,9 @@ public class Menu extends JFrame implements ActionListener{
 	private void topdisplay() {
 		this.getContentPane().setLayout(null);
 		 	//타이틀 border 생성
-		
-		
+		for(int i=0; i<205; i++) {
+			dataSize.add(i);
+		}
 		JPanel panel = new JPanel();
 		JLabel search = new JLabel("검색 : ");
 		JButton enrollment = new JButton("상품 등록");
@@ -621,7 +622,6 @@ public class Menu extends JFrame implements ActionListener{
 					count_max = center_page;
 				}
 				count_page++;
-				System.out.println(total_page);
 				// 중간 페이지 값 구하기
 				if (count_page < count_max || (end_page == 0 && count_page == count_max)) { // center
 					page_number = (count_page * number) - 4; // 1페이지 - 6페이지 - 11페이지 ...
@@ -640,9 +640,6 @@ public class Menu extends JFrame implements ActionListener{
 					count_page--;
 				}
 				if (count_page == count_max) { // 카운트 최대 값
-					System.out.println(count_page);
-					System.out.println(count_max);
-					System.out.println(end_page);
 					for (int i = 0; i < end_page; i++) { // 마지막 페이지 값 계산 (마지막 페이지 번호 버튼 생성)
 						switch (i) {
 						case 0:
