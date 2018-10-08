@@ -29,6 +29,7 @@ import javax.swing.JTextPane;
 public class Menu extends JFrame implements ActionListener{
 	//	컴포넌트 배치용 공간
 	Enrollment enr = new Enrollment();
+	Thedetails det = new Thedetails();
 //	Rightdisplay right = new Rightdisplay();
 	private Container con;
 	private JTextField textField = new JTextField();
@@ -369,6 +370,7 @@ public class Menu extends JFrame implements ActionListener{
 				panel_3[i].add(details);
 			}
 		});
+		
 		board_Page.add(c);
 		c.addActionListener(e_c->{
 			int size = 0;
@@ -432,6 +434,7 @@ public class Menu extends JFrame implements ActionListener{
 				panel_3[i].add(details);
 			}
 		});
+		
 		board_Page.add(d);
 		d.addActionListener(e_d->{
 			int size = 0;
@@ -495,6 +498,7 @@ public class Menu extends JFrame implements ActionListener{
 				panel_3[i].add(details);
 			}
 		});
+		
 		board_Page.add(e);
 		e.addActionListener(e_e->{
 			int size = 0;
@@ -554,10 +558,16 @@ public class Menu extends JFrame implements ActionListener{
 				
 				details = new JButton("상세 보기");
 				details.setBounds(847, 70, 143, 35);
+				details.addActionListener(event->{
+					det.setVisible(true);
+				});
 				panel_3[i].add(details);
 				
 			}
 		});
+		
+		
+		
 		// 이전페이지 버튼
 		previous_Page.setBorder(border);
 		previous_Page.setBounds(261, 886, 145, 46);
@@ -696,6 +706,7 @@ public class Menu extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		int number = 5;						//페이지 계산 고정 값
+		
 		if (event.getSource() == button_1 || event.getSource() == button_2 || event.getSource() == button_3
 				|| event.getSource() == button_4 || event.getSource() == button_5) {
 			a.setText(null); a.setEnabled(true);
@@ -768,7 +779,6 @@ public class Menu extends JFrame implements ActionListener{
 					break;
 					}
 				}
-				
 //				start_page -= 5;
 			}else{
 				//start_page 값이 6이상의 값일때

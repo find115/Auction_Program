@@ -84,10 +84,7 @@ public class Enrollment extends JDialog{
 		textField_3.setBounds(471, 412, 132, 21);
 		getContentPane().add(textField_3);
 		textField_3.setColumns(10);
-		textField_3.addFocusListener (new FocusListener() {
-			public void focusLost(FocusEvent e) {
-				
-			}
+		textField_3.addFocusListener (new FocusAdapter() {
 			public void focusGained(FocusEvent e) {
 				if(textField_3.getText() == null || textField_3.getText() == "") {
 					textField_3.setText("ex)2018-12-31 23:59");
@@ -96,7 +93,6 @@ public class Enrollment extends JDialog{
 				}
 			}
 		});
-		
 
 		// АЁАн
 		price.setBounds(429, 456, 57, 15);
