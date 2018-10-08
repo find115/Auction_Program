@@ -1,9 +1,12 @@
-package network;
+package project_main;
 
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Date;
 import java.util.List;
+
+import network.Client_Function;
+import network.Item;
 
 public class Client_Thread extends Thread{
 	private List<Item> itemList;
@@ -12,6 +15,7 @@ public class Client_Thread extends Thread{
 	
 	//새로고침
 	public void run() {
+		
 		Client_Function function  = new Client_Function();
 		InetAddress inet = null;
 		int port = 50000;
@@ -26,6 +30,7 @@ public class Client_Thread extends Thread{
 		
 		setItemList(function.getItemList());
 		setServer_Time(function.getReceiveDate());
+		
 	}
 
 

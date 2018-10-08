@@ -5,11 +5,11 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.InetAddress;
-import java.net.Socket;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -23,18 +23,38 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-import network.Client_Function;
-import network.Client_Thread;
+import network.Item;
 
-public class Menu extends JFrame implements ActionListener{
+public class Menu extends JFrame implements ActionListener, Serializable, Runnable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	//	컴포넌트 배치용 공간
 	Enrollment enr = new Enrollment();
 	Thedetails det = new Thedetails();
 //	Rightdisplay right = new Rightdisplay();
 	
-	Client_Thread ct;
+	private List<Item> itemList = new ArrayList<>();
+	private Date server_Time = new Date();
 	
-	private Container con;
+	public List<Item> getItemList() {
+		return itemList;
+	}
+	public void setItemList(List<Item> itemList) {
+		this.itemList = itemList;
+	}
+
+	public Date getServer_Time() {
+		return server_Time;
+	}
+	public void setServer_Time(Date server_Time) {
+		this.server_Time = server_Time;
+	}
+
+	private Container con = this.getContentPane();
 	private JTextField textField = new JTextField();
 	private int search_count;
 	private int count_page;
@@ -95,6 +115,11 @@ public class Menu extends JFrame implements ActionListener{
 	private JButton e = null;
 	
 	public Menu() {
+//		this.setItemList(itemList);
+//		this.setServer_Time(server_Time);
+//		this.getItemList();
+//		this.setServer_Time(server_Time);
+		
 		this.topdisplay();
 		this.leftdisplay();
 		this.rightdisplay();
@@ -117,10 +142,12 @@ public class Menu extends JFrame implements ActionListener{
 	private void topdisplay() {
 		this.getContentPane().setLayout(null);
 		 	//타이틀 border 생성
-		for(int i=0; i<ct.getItemList().size(); i++) {
+		
+		for(int i=0; i<getItemList().size(); i++) {
 			dataSize.add(i);
 		}
 		JPanel panel = new JPanel();
+		con.add(panel);//
 		JLabel search = new JLabel("검색 : ");
 		JButton enrollment = new JButton("상품 등록");
 		JButton button_6 = new JButton("상품 취소");
@@ -219,14 +246,13 @@ public class Menu extends JFrame implements ActionListener{
 		button_5.setFont(font_2);
 	}
 	
-	private void rightdisplay() {
+	public void rightdisplay() {
 		
 		main_Board.setBounds(205, 100, 1059, 727);	//삭제
 		main_Board.setBorder(border);				//삭제			
 		this.getContentPane().add(main_Board);						//삭제
 		main_Board.setLayout(null);					//삭제
-		
-		result.setText("검색 결과 : " + Integer.toString(dataSize.size())+"개가 확인 되었습니다.");
+		result.setText("검색 결과 : " + getItemList().size()+"개가 확인 되었습니다.");
 		result.setBounds(290, 0, 367, 37);
 		result.setEditable(false);
 		main_Board.add(result);						//this
@@ -798,6 +824,19 @@ public class Menu extends JFrame implements ActionListener{
 				d.setText(Integer.toString(page_number));
 				page_number=(count_page*number);		//5페이지 - 10페이지 - 15페이지 ...
 				e.setText(Integer.toString(page_number));
+			}
+		}
+	}
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		while(true) {
+			setItemList(getItemList());
+			setServer_Time(getServer_Time());
+			try {
+				Thread.sleep(100);
+			}catch(Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
