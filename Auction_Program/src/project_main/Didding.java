@@ -14,24 +14,24 @@ import javax.swing.JButton;
 
 public class Didding extends JDialog{
 	
-	private JPanel panel = new JPanel();
-	JPanel panel_1 = new JPanel();
-	JPanel panel_2 = new JPanel();
+	private JPanel panel = new JPanel();			//현재 최고 입찰가 패널
+	private JPanel panel_1 = new JPanel();			//
+	private JPanel panel_2 = new JPanel();
+	private JPanel panel_5 = new JPanel();
+	private JPanel panel_6 = new JPanel();
+	private JPanel panel_7 = new JPanel();
 	
-	JLabel lblNewLabel = new JLabel("현재 입찰가 : ");
-	JLabel lblNewLabel_2 = new JLabel("원");
+	private JLabel lblNewLabel = new JLabel("현재 입찰가 : ");
+	private JLabel lblNewLabel_2 = new JLabel("원");
+	private JLabel lblNewLabel_3 = new JLabel("입찰 금액 입력");
 	
-	JPanel panel_5 = new JPanel();
-	JLabel lblNewLabel_3 = new JLabel("입찰 금액 입력");
-	JPanel panel_6 = new JPanel();
+	private JPanel panel_3 = new JPanel();					//입찰 하기 버튼 패널 생성
+	private JButton btnNewButton = new JButton("입찰 하기");	//입찰 하기 버튼 생성
+	
+	private JPanel panel_4 = new JPanel();					//입찰 취소 버튼 패널 생성
+	private JButton btnNewButton_1 = new JButton("입찰 취소");	//입찰 취소 버튼 생성
+
 	private JTextField textField = new JTextField();
-	JPanel panel_7 = new JPanel();
-	
-	private JPanel panel_3 = new JPanel();
-	private JButton btnNewButton = new JButton("입찰 하기");
-	
-	private JPanel panel_4 = new JPanel();
-	private JButton btnNewButton_1 = new JButton("입찰 취소");
 
 	public Didding() {
 		display();
