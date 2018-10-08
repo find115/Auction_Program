@@ -15,13 +15,14 @@ import javax.swing.JButton;
 public class Didding extends JDialog{
 	
 	private JPanel panel = new JPanel();			//현재 최고 입찰가 패널
-	private JPanel panel_1 = new JPanel();			//
+	private JPanel panel_1 = new JPanel();			//현재 
 	private JPanel panel_2 = new JPanel();
 	private JPanel panel_5 = new JPanel();
 	private JPanel panel_6 = new JPanel();
 	private JPanel panel_7 = new JPanel();
 	
 	private JLabel lblNewLabel = new JLabel("현재 입찰가 : ");
+	private JLabel lblNewLabel_1 = new JLabel("999,999,999");
 	private JLabel lblNewLabel_2 = new JLabel("원");
 	private JLabel lblNewLabel_3 = new JLabel("입찰 금액 입력");
 	
@@ -46,24 +47,16 @@ public class Didding extends JDialog{
 		panel.setBounds(113, 27, 99, 27);
 		getContentPane().add(panel);
 		panel.setLayout(new GridLayout(1, 0, 0, 0));
-		
-		JLabel lblNewLabel_1 = new JLabel("999,999,999");
 		panel.add(lblNewLabel_1);
-		
-		
+	
 		panel_1.setBounds(12, 27, 89, 27);
 		getContentPane().add(panel_1);
 		panel_1.setLayout(new GridLayout(1, 0, 0, 0));
-		
-		
 		panel_1.add(lblNewLabel);
-		
-		
+
 		panel_2.setBounds(224, 27, 48, 27);
 		getContentPane().add(panel_2);
 		panel_2.setLayout(new GridLayout(1, 0, 0, 0));
-		
-		
 		panel_2.add(lblNewLabel_2);
 		
 		panel_3.setBounds(12, 150, 126, 52);
@@ -89,17 +82,14 @@ public class Didding extends JDialog{
 			}
 		});
 		
-		
 		panel_5.setBounds(12, 64, 200, 27);
 		getContentPane().add(panel_5);
 		panel_5.setLayout(new GridLayout(1, 0, 0, 0));
-		
 		panel_5.add(lblNewLabel_3);
 		
 		panel_6.setBounds(12, 101, 200, 27);
 		getContentPane().add(panel_6);
 		panel_6.setLayout(new GridLayout(1, 0, 0, 0));
-		
 		panel_6.add(textField);
 		textField.setColumns(10);
 		
