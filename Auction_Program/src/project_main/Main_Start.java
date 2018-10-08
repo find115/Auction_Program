@@ -2,9 +2,10 @@ package project_main;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import java.awt.GridLayout;
 
-class Window_Main extends JFrame{
+import network.Client_Thread;
+
+class Window_Main extends JFrame {
 
 	Menu menu = new Menu();
 	private JButton start = new JButton("Start");
@@ -19,16 +20,20 @@ class Window_Main extends JFrame{
 	private void menu() {
 		this.add(start);
 		start.addActionListener(e->{
+			Client_Thread ct = new Client_Thread();
+			ct.setDaemon(true);
+			ct.start();
+			
 			menu.setVisible(true);
 		});
 	}
 	
-}
-
-public class Main_Start {
+	
 	public static void main(String[] args) {
+		
 		
 		Window_Main win = new Window_Main();
 		win.setVisible(true);
 	}
 }
+

@@ -22,7 +22,8 @@ public class FileIo {
 	public void fileWriter(List<Item> itemList) {
 		
 //		File target = new File("Item_Db","item.list");
-		File target = new File(System.getProperty("user.dir")+"\\Server_Db\\Item_Db\\item.list");
+//		File target = new File(System.getProperty("user.dir")+"\\Server_Db\\Item_Db\\item.list");
+		File target = new File("D:\\KimJunSeon\\worksapce\\Auction_Program\\Server_Db\\Item_Db\\item.list");
 		
 		ObjectOutputStream object;
 		try {
@@ -41,7 +42,8 @@ public class FileIo {
 	public List<Item> fileReader(List<Item> itemList) {
 		
 //		File target = new File("Item_Db","item.list");
-		File target = new File(System.getProperty("user.dir")+"\\Server_Db\\Item_Db\\item.list");
+//		File target = new File(System.getProperty("user.dir")+"\\Server_Db\\Item_Db\\item.list");
+		File target = new File("D:\\KimJunSeon\\worksapce\\Auction_Program\\Server_Db\\Item_Db\\item.list");
 		
 //		List<Item> itemList = new ArrayList<>();
 		

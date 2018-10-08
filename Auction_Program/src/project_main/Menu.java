@@ -1,12 +1,12 @@
 package project_main;
 
-import java.awt.Component;
 import java.awt.Container;
-import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,24 +19,28 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 import javax.swing.border.Border;
-import javax.swing.JTextPane;
+
+import network.Client_Function;
+import network.Client_Thread;
 
 public class Menu extends JFrame implements ActionListener{
 	//	컴포넌트 배치용 공간
 	Enrollment enr = new Enrollment();
 	Thedetails det = new Thedetails();
 //	Rightdisplay right = new Rightdisplay();
+	
+	Client_Thread ct;
+	
 	private Container con;
 	private JTextField textField = new JTextField();
 	private int search_count;
 	private int count_page;
 	private int count_max;
 	private int count_least=1;
+	
 	
 	private List<Integer> dataSize = new ArrayList<Integer>();					//데이터 크기
 	private int end_data;			//마지막 데이터 값
@@ -113,7 +117,7 @@ public class Menu extends JFrame implements ActionListener{
 	private void topdisplay() {
 		this.getContentPane().setLayout(null);
 		 	//타이틀 border 생성
-		for(int i=0; i<205; i++) {
+		for(int i=0; i<ct.getItemList().size(); i++) {
 			dataSize.add(i);
 		}
 		JPanel panel = new JPanel();
@@ -797,4 +801,6 @@ public class Menu extends JFrame implements ActionListener{
 			}
 		}
 	}
+
+	
 }
