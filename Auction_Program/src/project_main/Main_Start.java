@@ -17,17 +17,11 @@ import network.Item;
 
 class Main_Start extends JFrame implements Runnable{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private List<Item> itemList = new ArrayList<>();
 	private Date server_Time = new Date();
 	
-	
 	//새로고침
 	public void run() {
-		while(true){
 		Client_Function function  = new Client_Function();
 		InetAddress inet = null;
 		int port = 50000;
@@ -53,17 +47,7 @@ class Main_Start extends JFrame implements Runnable{
 		setItemList(function.getItemList());
 		setServer_Time(function.getReceiveDate());
 		System.out.println(itemList.get(0).getTitle());
-		
-		menu.rightdisplay();
-		
-		try {
-		Thread.sleep(1000);
-		}catch(Exception e) {
-			
-		}
-		}
 	}
-
 
 	public List<Item> getItemList() {
 		return itemList;
@@ -84,7 +68,6 @@ class Main_Start extends JFrame implements Runnable{
 		this.server_Time = server_Time;
 	}
 	
-	Menu menu = new Menu();
 	
 	private Container con = this.getContentPane();
 	private JButton start = new JButton("Start");
@@ -97,16 +80,14 @@ class Main_Start extends JFrame implements Runnable{
 		this.setResizable(false);
 	}
 
+//	버튼을 클릭할때 이벤트
 	private void menu() {
 		con.add(start);
 		this.add(start);
 		start.addActionListener(e->{
 			if(e.getSource()==start) {
-				Thread s = new Thread(menu);
-				s.setDaemon(true);
-				s.start();
-				menu.setItemList(itemList);
-				menu.setServer_Time(server_Time);
+//				여기서 Menu를 선언할떄 아이템리스트와 서버시간을 같이 넘겨주면서 생성합니다.
+				Menu menu = new Menu(getItemList(), getServer_Time());
 				menu.setVisible(true);
 			}
 		});
@@ -117,7 +98,6 @@ class Main_Start extends JFrame implements Runnable{
 		Thread t = new Thread(win);
 		t.setDaemon(true);
 		t.start();
-				
 				
 		((Component) win).setVisible(true);
 	}

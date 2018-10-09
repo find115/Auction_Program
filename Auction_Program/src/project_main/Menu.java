@@ -25,12 +25,7 @@ import javax.swing.border.Border;
 
 import network.Item;
 
-public class Menu extends JFrame implements ActionListener, Serializable, Runnable{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class Menu extends JFrame implements ActionListener{
 	
 	//	컴포넌트 배치용 공간
 	Enrollment enr = new Enrollment();
@@ -114,11 +109,10 @@ public class Menu extends JFrame implements ActionListener, Serializable, Runnab
 	private JButton d = null;
 	private JButton e = null;
 	
-	public Menu() {
-//		this.setItemList(itemList);
-//		this.setServer_Time(server_Time);
-//		this.getItemList();
-//		this.setServer_Time(server_Time);
+	public Menu(List<Item> itemList, Date server_Time) {
+//		Main_Start에서 선언할때 받아온 itemList와 server_Time을 this로 선언해줍니다.
+		this.itemList = itemList;
+		this.server_Time = server_Time;
 		
 		this.topdisplay();
 		this.leftdisplay();
@@ -824,19 +818,6 @@ public class Menu extends JFrame implements ActionListener, Serializable, Runnab
 				d.setText(Integer.toString(page_number));
 				page_number=(count_page*number);		//5페이지 - 10페이지 - 15페이지 ...
 				e.setText(Integer.toString(page_number));
-			}
-		}
-	}
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		while(true) {
-			setItemList(getItemList());
-			setServer_Time(getServer_Time());
-			try {
-				Thread.sleep(100);
-			}catch(Exception e) {
-				e.printStackTrace();
 			}
 		}
 	}
