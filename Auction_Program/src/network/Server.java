@@ -42,10 +42,6 @@ class Server extends JFrame{
 	
 	static Server_Creation server = new Server_Creation();
 	
-	//아이템 리스트 test코드
-	Item item = new Item();
-	List<Item> itemList = new ArrayList<>();
-	
 	private int count = 0;//log를 찍기 위해 필요한 변수
 	public int getCount() {
 		return count;
@@ -99,25 +95,6 @@ class Server extends JFrame{
 			public void run() {
 				while(true) {
 						serverLog(getCount());
-//						서버 itemList에 갱신된 itemList를 넣어주는 기능
-//						itemList = server.getItemList();
-						
-						
-//						if(server.getList().size()!=count) {
-//							area.append("현재 접속자 수 : "+server.getList().size()+"명\n");
-//							count = server.getList().size();
-//						}
-						
-						
-//						System.out.println(server.function.getActivity());
-						
-						
-//						area.append(server.getAa().toString()+"\n");
-//						System.out.println(server.getAa());
-//						area.setCaretPosition(area.getDocument().getLength());//자동 스크롤  
-//						area.append("~~~~~~\n");
-						
-						
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
@@ -129,15 +106,6 @@ class Server extends JFrame{
 		};
 		executorService.submit(c_Add);
 	}
-	
-//	원래 접속자수를 찍으려고 했으나 한번 접속후 끊어 버리는 방식이라 구지 필요 없을 것 같다.
-//	private void serverLog() {
-//		if(!getIpAdd().equals(server.getC_Address())) {
-//			area.append(server.getC_Address()+"\n");
-//			setIpAdd(server.getC_Address());
-//			area.setCaretPosition(area.getDocument().getLength());//자동 스크롤  
-//		}
-//	}
 	
 	private void serverLog(int count) {
 			if(server.function.getActivity() != count) {
@@ -184,7 +152,6 @@ class Server extends JFrame{
 		
 		Server frame = new Server();
 		frame.setVisible(true);
-		
 		
 	}
 }

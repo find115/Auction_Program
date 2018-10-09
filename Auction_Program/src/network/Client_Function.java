@@ -15,6 +15,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 클라이언트 기능 클래스
+ * 클라이언트에서 사용할 기능들을 만들어 둠.
+ * @author 김준선
+ */
 public class Client_Function implements Serializable{
 	public static final int BID = 1;					//입찰
 	public static final int BID_CANCEL = 2;				//입찰취소
@@ -228,6 +233,7 @@ public class Client_Function implements Serializable{
 	}
 	
 //	상품을 등록시키는 메소드
+//	매개변수 : Socket, Item
 	public boolean product_Registration(Socket socket,Item item) {
 		out = setOut(getOut(), socket);
 		in = setIn(getIn(), socket);
@@ -240,30 +246,38 @@ public class Client_Function implements Serializable{
 	}
 	
 //	입찰하는 메소드
-	public boolean bidding(Socket socket,int item_Num, int bid, List<Item> itemList) {
+//	매개변수 : Socket, 입찰금액(int), Item
+	public boolean bidding(Socket socket, int bid, Item item) {
 		out = setOut(getOut(), socket);
 		in = setIn(getIn(), socket);
 		
 		sendWork(BID, out);
-		int target=0;
 		boolean check;
-		for(int i=0; i<itemList.size(); i++) {
-			if(itemList.get(i).getItemNumber()==item_Num) {
-				target = i;
-				break;
-			}
-		}
+//		int target=0;
+//		for(int i=0; i<itemList.size(); i++) {
+//			if(itemList.get(i).getItemNumber()==item_Num) {
+//				target = i;
+//				break;
+//			}
+//		}
+		
+		List<Bids> bidsList = item.getBidsList();
+		
 		System.out.println("보내기전");
-		List<Bids> bidsList = itemList.get(target).getBidsList();
+		
+//		List<Bids> bidsList = itemList.get(target).getBidsList();
+		
 		if(bidsList.size()==0 || bid>bidsList.get(bidsList.size()-1).getBid()) {
-			sendBid(item_Num, bid, out);
+//			sendBid(item_Num, bid, out);
+			sendBid(item.getItemNumber(), bid, out);
 			check = receive(in);
 			System.out.println("클라이언트 부분 성공");
 			terminate_Socket(socket, in, out);
 			return check;
 		}
 		else {
-			sendBid(item_Num, -1, out);
+//			sendBid(item_Num, -1, out);
+			sendBid(item.getItemNumber(), bid, out);
 			check = receive(in);
 			terminate_Socket(socket, in, out);
 			return false;
@@ -338,6 +352,7 @@ public class Client_Function implements Serializable{
 //	검색 메소드
 //	검색어에 따라 정렬
 // 	오름차순 정렬(퀵 정렬)
+//	매개변수 : 검색어, ItemList
 	public List<Item> search_Sort(String input, List<Item> itemList){
 		String str = input;
 		List<Item> searched_ItemList = new ArrayList<>();
@@ -369,7 +384,6 @@ public class Client_Function implements Serializable{
 		sortedList.addAll(search_Sort(str, higherList));
 		return sortedList;		
 	}
-		
 		
 	
 }

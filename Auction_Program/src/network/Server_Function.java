@@ -6,7 +6,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+/**
+ * 서버 기능 클래스
+ * 서버에서 사용할 기능들을 메소드로 만들어둠.
+ * @author 준선
+ */
 public class Server_Function {
 	public static final int BID = 1; // 입찰
 	public static final int BID_CANCEL = 2; // 입찰취소
@@ -51,7 +55,7 @@ public class Server_Function {
 		this.serverLog = serverLog;
 	}
 
-	//	소켓을 종료시키는 메소드
+//	소켓을 종료시키는 메소드
 	public void terminate_Socket(Socket socket, ObjectInputStream in, ObjectOutputStream out) {
 		try {
 			in.close();
@@ -82,28 +86,22 @@ public class Server_Function {
 		}
 	}
 	
-//	List<Connention> 새로고침
-//	public void refreshList(List<Connection> list) {
-//		for(int i=0; i<list.size(); i++) {
-//			try {
-//				if(!list.get(i).socket.isConnected()) {
-//					list.remove(i);
-//				}
-//			}catch(Exception e) {
-//				list.remove(i);
-//			}
-//		}
-//	}
-	
-	
+//	입찰 취소 메소드
 //	싱크를 위해 입찰만 따로 메소드 만듬
-//	클라이언트로 부터 입찰 가격을 받아서 List<Item>의 해당 인덱스에 List<Bids>에 add를 해준다.
+//	클라이언트로 부터 회원정보와 입찰금액을 받아온다.
 //	회원가입 기능을 만든 후에 수정해야함
-	public void bid(int work_Number, Socket socket, List<Item> itemList, ObjectInputStream in, ObjectOutputStream out
+//	받은 회원정보와 입찰한 회원정보가 일치하고 입찰기간이 끈나지 않았으면 입찰했던 기록을 지워줌
+	public void bid_Cancel(int work_Number, Socket socket, List<Item> itemList, ObjectInputStream in, ObjectOutputStream out
 										,List<Member> memberList, List<Connection>list) {
+		
+	}
+	
+//	입찰하는 메소드
+	public void bid(int work_Number, Socket socket, List<Item> itemList, ObjectInputStream in, ObjectOutputStream out,
+			List<Member> memberList, List<Connection> list) {
 		int item_Num = 0;
 		int bid = 0;
-		
+
 		try {
 			item_Num = in.readInt();
 			bid = in.readInt();
@@ -135,6 +133,19 @@ public class Server_Function {
 			file.fileWriter(itemList);
 			terminate_Socket(socket, in, out);
 
+			resetServerLog();//
+			serverLog.append(socket.getRemoteSocketAddress());//
+			serverLog.append("에서 입찰 하였습니다.\n");//
+			serverLog.append("[상품번호] : ");//
+			serverLog.append(itemList.get(target).getItemNumber());// 고유번호
+			serverLog.append("번");
+			serverLog.append("  [상품이름] : ");//
+			serverLog.append(itemList.get(target).getTitle());// 상품이름
+			serverLog.append("  [입찰금액] : ");
+			serverLog.append(bid);// 상품이름
+			serverLog.append("원");// 상품이름
+			setActivity(activity + 1);//
+
 		} else {
 //			여기서 클라이언트에게 false를 보내줌
 			isRegistration = false;
@@ -142,6 +153,7 @@ public class Server_Function {
 			terminate_Socket(socket, in, out);
 		}
 	}
+	
 	
 //	상품 등록 메소드
 	public void product_registration(Socket socket, List<Item> itemList, ObjectInputStream in, ObjectOutputStream out,
@@ -174,6 +186,11 @@ public class Server_Function {
 			check(socket, isRegistration(), out);
 			terminate_Socket(socket, in, out);
 		}
+	}
+	
+//	상품삭제 메소드
+	public void delete_Product() {
+		
 	}
 	
 //	새로고침 메소드
@@ -360,12 +377,16 @@ public class Server_Function {
 		switch (work_Number) {
 		case PRODUCT_REGISTRATION: // 상품등록
 			product_registration(socket, itemList, in, out, memberList);
+			resetServerLog();//
+			serverLog.append(socket.getRemoteSocketAddress());//
+			serverLog.append("에서 [상품등록] 하였습니다.");//
+			setActivity(activity+1);//
 			break;
 		case REFRESH: // 새로고침
 			refresh(socket, itemList, in, out);
 			resetServerLog();//
 			serverLog.append(socket.getRemoteSocketAddress());//
-			serverLog.append("에서 새로고침 하였습니다.");//
+			serverLog.append("에서 [새로고침] 하였습니다.");//
 			setActivity(activity+1);//
 			break;
 		case DELETE_PRODUCT: // 상품삭제
@@ -393,4 +414,5 @@ public class Server_Function {
 			break;
 		}
 	}
+	
 }

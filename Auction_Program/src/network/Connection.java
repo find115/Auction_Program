@@ -33,20 +33,6 @@ public class Connection extends Thread{
 	}
 
 	public Connection() {
-//		if(socket.isConnected()) {
-//			try {
-//				out.writeObject(isConnection);
-//				out.flush();
-//				Thread.sleep(5000);
-//			} catch (Exception e1) {
-//				try {
-//					System.out.println("connecntion 쓰레드 에러");
-//					socket.close();
-//				}catch(Exception e2) {
-//					e2.printStackTrace();
-//				}
-//			}
-//		}
 	}
 	
 

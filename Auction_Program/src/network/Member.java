@@ -1,7 +1,10 @@
 package network;
 import java.io.Serializable;
 import java.util.Date;
-
+/**
+ * 입찰 객체를 만들기 위한 아이템 클래스
+ * @author 김준선
+ */
 public class Member implements Serializable{
 	/**
 	 * 

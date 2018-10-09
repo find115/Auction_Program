@@ -15,6 +15,11 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * 서버를 생성시키는 클래스
+ * 종료 메소드가 있음.
+ * @author 김준선
+ */
 public class Server_Creation {
 	private static Object lock = new Object();//동기화를 위해 생성함.
 	
@@ -61,7 +66,6 @@ public class Server_Creation {
 						list.add(cn);
 						setC_Address("[클라이언트 접속] : "+socket.getRemoteSocketAddress());
 						
-						
 //					 	member.list파일에서 memberList를 읽어온다.
 //						만약 member.list에 아무것도 저장되있지 않으면 ArrayList를 생성해서 저장한다.
 						memberList = file.fileReader_Member(memberList);
@@ -69,19 +73,20 @@ public class Server_Creation {
 							memberList = new ArrayList<>();
 							file.fileWriter_Member(memberList);
 						}
-						
-						itemList = file.fileReader(itemList);//이거 반드시 해줘야함.
+//						item.list파일에서 ItemList를 읽어 온다.
+//						만약 item.list에 아무것도 저장되어있지 않으면 ArrayList를 생성해서 저장한다.
+						itemList = file.fileReader(itemList);
 						if(itemList == null) {
 							itemList = new ArrayList<>();
 							file.fileWriter(itemList);
 						}
 						
-//						작업 넘버링을 입력받음
+//						클라이언트가 접속하면 클라이언트에서 보내는 작업넘버를 받고
+//						해당하는 작업을 수행해주고 연결을 끊어버린다.
 						int work_Number = (int) cn.in.readObject();
 						if(work_Number!=function.BID) {
 							function.work(work_Number, socket, itemList, cn.in, cn.out, memberList, list);
 							System.out.println(work_Number);
-							
 							socket.close();
 						}
 						else {
@@ -89,7 +94,6 @@ public class Server_Creation {
 								itemList = file.fileReader(itemList);
 								function.bid(work_Number, socket, itemList, cn.in, cn.out, memberList, list);
 								System.out.println("입찰완료"+work_Number);
-								
 								socket.close();
 							}
 						}

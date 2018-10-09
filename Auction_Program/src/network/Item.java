@@ -7,8 +7,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 
 /**
- * List<Item>을 만들기 위한 아이템 클래스
- * 
+ * 상품 객체를 만들기 위한 아이템 클래스
  * @author 김준선
  */
 

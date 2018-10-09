@@ -34,19 +34,19 @@ class Main_Start extends JFrame implements Runnable{
 		socket = function.socket_Creation(inet, port);
 		function = function.refresh_Client(socket);
 		if(function.getItemList()==null) {
-			System.out.println("받은 거null");
+			System.out.println("새로고침해서 받은 데이터가 null입니다.");
 		}
 		else {
-			System.out.println(function.getItemList().size());
-			System.out.println(function.getItemList().get(0).getId());
+//			System.out.println(function.getItemList().size());
+//			System.out.println(function.getItemList().get(0).getId());
 		}
-		System.out.println(function.getItemList().size());
-		System.out.println(function.getItemList().get(0).getTitle());
-		itemList = function.getItemList();
-		server_Time = function.getReceiveDate();
+//		System.out.println(function.getItemList().size());
+//		System.out.println(function.getItemList().get(0).getTitle());
+//		itemList = function.getItemList();
+//		server_Time = function.getReceiveDate();
 		setItemList(function.getItemList());
 		setServer_Time(function.getReceiveDate());
-		System.out.println(itemList.get(0).getTitle());
+//		System.out.println(itemList.get(0).getTitle());
 	}
 
 	public List<Item> getItemList() {
