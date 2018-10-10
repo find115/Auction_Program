@@ -26,7 +26,6 @@ public class Member implements Serializable{
 	public void setId(String id) {
 		this.id = id;
 	}
-	
 	public String getNickName() {
 		return nickName;
 	}

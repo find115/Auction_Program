@@ -32,8 +32,8 @@ public class Menu extends JFrame implements ActionListener{
 	Thedetails det = new Thedetails();
 //	Rightdisplay right = new Rightdisplay();
 	
-	private List<Item> itemList = new ArrayList<>();
-	private Date server_Time = new Date();
+	private List<Item> itemList/* = new ArrayList<>()*/;
+	private Date server_Time/* = new Date()*/;
 	
 	public List<Item> getItemList() {
 		return itemList;
