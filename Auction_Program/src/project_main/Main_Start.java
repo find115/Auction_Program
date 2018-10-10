@@ -3,6 +3,7 @@ package project_main;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.HeadlessException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -84,7 +85,8 @@ class Main_Start extends JFrame implements Runnable{
 
 	private Container con = this.getContentPane();
 	private JPanel	panel = new JPanel();
-	private JLabel hello_Auction = new JLabel("Hellow Auction~!");
+	private Font font = new Font("굴림",Font.PLAIN, 25);
+	private JLabel hello_Auction = new JLabel("        Hellow Auction~!");
 	private JLabel id = new JLabel("ID 입력 ");
 	private JLabel pw = new JLabel("PW 입력");
 	private JTextField id_Input = new JTextField();
@@ -107,6 +109,7 @@ class Main_Start extends JFrame implements Runnable{
 		
 		panel.setBounds(0, 0, 384, 561);
 		hello_Auction.setBounds(34, 38, 305, 49);
+		hello_Auction.setFont(font);
 		id.setBounds(33, 157, 88, 49);
 		pw.setBounds(33, 267, 88, 49);
 		id_Input.setBounds(133, 157, 238, 49);
