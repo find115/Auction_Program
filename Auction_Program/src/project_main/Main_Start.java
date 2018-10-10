@@ -1,5 +1,6 @@
 package project_main;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.HeadlessException;
@@ -11,17 +12,19 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 import network.Client_Function;
 import network.Item;
 
 class Main_Start extends JFrame implements Runnable{
-
-//	private List<Item> itemList = new ArrayList<>();
-//	private Date server_Time = new Date();
 	
 	private List<Item> itemList;
 	private Date server_Time;
+	
 	private boolean flag = true;
 	
 	//새로고침
@@ -80,22 +83,59 @@ class Main_Start extends JFrame implements Runnable{
 	}
 
 	private Container con = this.getContentPane();
-	private JButton start = new JButton("Start");
+	private JPanel	panel = new JPanel();
+	private JLabel hello_Auction = new JLabel("Hellow Auction~!");
+	private JLabel id = new JLabel("ID 입력 ");
+	private JLabel pw = new JLabel("PW 입력");
+	private JTextField id_Input = new JTextField();
+	private JPasswordField pw_Input = new JPasswordField();
+	
+	private JButton logIn = new JButton("LogIn");
+	private JButton join_Membership = new JButton("회원가입");
 	
 	public Main_Start() {
-		this.menu();
-		this.setTitle("Mini Project");
-		this.setSize(800, 600);
+		this.event();
+		this.display();
+		this.setTitle("Auction_Client");
+		this.setSize(400, 600);
 		this.setLocationByPlatform(true);
 		this.setResizable(false);
 	}
+	
+	private void display() {
+		panel.setLayout(null);
+		
+		panel.setBounds(0, 0, 384, 561);
+		hello_Auction.setBounds(34, 38, 305, 49);
+		id.setBounds(33, 157, 88, 49);
+		pw.setBounds(33, 267, 88, 49);
+		id_Input.setBounds(133, 157, 238, 49);
+		pw_Input.setBounds(133, 267, 239, 49);
+		logIn.setBounds(58, 361, 260, 61);
+		join_Membership.setBounds(58, 461, 260, 61);
+		
+		panel.add(hello_Auction);
+		
+		panel.add(id);
+		panel.add(pw);
+		
+		panel.add(id_Input);
+		panel.add(pw_Input);
+		
+		panel.add(logIn);
+		panel.add(join_Membership);
+		
+		con.add(panel);
+		
+	}
+	
 
 //	버튼을 클릭할때 이벤트
-	private void menu() {
-		con.add(start);
-		this.add(start);
-		start.addActionListener(e->{
-			if(e.getSource()==start) {
+	private void event() {
+//		con.add(logIn);
+		this.add(logIn);
+		logIn.addActionListener(e->{
+			if(e.getSource()==logIn) {
 //				여기서 Menu를 선언할떄 아이템리스트와 서버시간을 같이 넘겨주면서 생성합니다.
 //				서버로 부터 itemList와 server_Time을 받을때 까지 기다렸다가 Menu를 실행합니다.
 				Runnable wait = new Runnable() {
@@ -127,6 +167,13 @@ class Main_Start extends JFrame implements Runnable{
 						menu.setVisible(true);
 					}
 				}
+			}
+		});
+		
+		join_Membership.addActionListener(e->{
+			if(e.getSource()==join_Membership) {
+				Join_Member join = new Join_Member();
+				join.setVisible(true);
 			}
 		});
 	}
