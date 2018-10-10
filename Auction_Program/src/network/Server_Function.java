@@ -393,17 +393,23 @@ public class Server_Function {
 			break;
 		case DUPLICATE_CONFIRMATION:// 아이디 중복확인
 			duplicate_Confirmation(socket, memberList, in, out);
+			serverLog.append(socket.getRemoteSocketAddress());//
+			serverLog.append("에서 [아이디 중복확인] 하였습니다.");//
 			break;
 		case N_DUPLICATE_CONFIRMATION://닉네임 중복확인
 			n_Duplicate_Confirmation(socket, memberList, in, out);
+			serverLog.append(socket.getRemoteSocketAddress());//
+			serverLog.append("에서 [닉네임 중복확인] 하였습니다.");//
 			break;
 		case JOIN_MEMBERSHIP: // 회원가입
 			join_Membership(socket, memberList, in, out);
+			serverLog.append(socket.getRemoteSocketAddress());//
+			serverLog.append("에서 [회원가입] 하였습니다.");//
 			break;
 		case LOGIN:	// 로그인	
 			login(socket, in, out, memberList);
 			serverLog.append(socket.getRemoteSocketAddress());//
-			serverLog.append("에서 로그인 하였습니다.");//
+			serverLog.append("에서 [로그인] 하였습니다.");//
 			setActivity(activity+1);//
 			break;
 		case MEMBERSHIP_WITHDRAWAL: // 회원탈퇴
