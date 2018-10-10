@@ -102,11 +102,11 @@ public class TestClient03 extends JFrame implements Runnable{
 			serverTime = function.getReceiveDate();
 			Format format = new SimpleDateFormat("y-MM-dd E HH:mm:ss");
 			System.out.println("서버시간 = "+format.format(serverTime));
-			try {
-				socket.close();
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
+//			try {
+//				socket.close();
+//			}catch(Exception e) {
+//				e.printStackTrace();
+//			}
 //	  	List<Item>에서 ImageIcon을 꺼내와서 JLabel에 찍어보는 기능
 //		ImageIcon뿐만 아니라 다른 정보도 다 꺼낼 수 있음.
 	   	ImageIcon images = itemList.get(itemList.size()-1).getImage();
@@ -120,7 +120,7 @@ public class TestClient03 extends JFrame implements Runnable{
 		
 //	    socket = function.socket_Creation(inet, port); //주석
 		
-//	    boolean result = function.bidding(socket, 90005, itemList.get(0));
+//	    boolean result = function.bidding(socket, 90009, itemList.get(0));
 //	    result = function.bidding(socket, 1, 8600, itemList);
 		
 //	    System.out.println("입찰결과 : "+result);

@@ -1,13 +1,8 @@
 package network;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -27,7 +22,7 @@ public class Server_Creation {
 	private ServerSocket serverSocket;
 	private boolean flag = true;
 	private String c_Address =  "초기값";//접속한 클라이언트 아이피주소
-	
+//	접속자수 테스트
 	ExecutorService executorService = Executors.newFixedThreadPool(1);
 	
 	Server_Function function = new Server_Function();
@@ -123,7 +118,7 @@ public class Server_Creation {
 			if(executorService != null && executorService.isShutdown()) {
 				executorService.shutdown();
 			}
-			notFlag();
+			setFlag(false);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -164,11 +159,10 @@ public class Server_Creation {
 	public void setServerSocket(ServerSocket serverSocket) {
 		this.serverSocket = serverSocket;
 	}
-	public boolean notFlag() {
-		flag = false;
+	public boolean isFlag() {
 		return flag;
 	}
-	public boolean getFalg() {
-		return flag;
+	public void setFlag(boolean flag) {
+		this.flag = flag;
 	}
 }

@@ -24,9 +24,9 @@ public class Server_Function {
 	public static final int LOGIN = 10;	 //로그 인
 	public static final int N_DUPLICATE_CONFIRMATION = 11; // 닉네임 중복확인
 	
-	Item item = new Item();
-	FileIo file = new FileIo();
-	Member mb = new Member();
+	private Item item = new Item();
+	private FileIo file = new FileIo();
+	private Member mb = new Member();
 	
 	private StringBuffer serverLog;//서버에 접속한 클라이언트의 활동내역을 저장하는 변수
 	private int activity = 0;//
@@ -135,7 +135,7 @@ public class Server_Function {
 
 			resetServerLog();//
 			serverLog.append(socket.getRemoteSocketAddress());//
-			serverLog.append("에서 입찰 하였습니다.\n");//
+			serverLog.append("에서 [입찰] 하였습니다.\n");//
 			serverLog.append("[상품번호] : ");//
 			serverLog.append(itemList.get(target).getItemNumber());// 고유번호
 			serverLog.append("번");

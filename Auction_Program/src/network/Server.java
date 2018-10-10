@@ -1,32 +1,25 @@
 package network;
 import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
-import javax.swing.border.Border;
 
 /**
  * 서버를 실행시키는 클래스
  * 서버 GUI
  * @author 김준선
  */
-class Server extends JFrame{
+class Server extends JFrame implements Runnable{
 
 //	컴포넌트 배치용 공간
 	private Container con = this.getContentPane();
@@ -37,8 +30,8 @@ class Server extends JFrame{
 	private Font font = new Font("굴림",Font.PLAIN, 25);
 	private String ipAdd = "초기값";
 	private boolean flag = true;
-//	접속가능한 클라이언트 수(1)
-	ExecutorService executorService = Executors.newFixedThreadPool(1);
+	
+//	ExecutorService executorService = Executors.newFixedThreadPool(1);
 	
 	static Server_Creation server = new Server_Creation();
 	
@@ -57,6 +50,13 @@ class Server extends JFrame{
 
 	public void setIpAdd(String ipAdd) {
 		this.ipAdd = ipAdd;
+	}
+	
+	public boolean isFlag() {
+		return flag;
+	}
+	public void setFlag(boolean flag) {
+		this.flag = flag;
 	}
 	
 	public Server() {
@@ -90,21 +90,21 @@ class Server extends JFrame{
 		
 		area.append("[서버 시작]\n");
 		
-		Runnable c_Add = new Runnable() {
-			@Override
-			public void run() {
-				while(true) {
-						serverLog(getCount());
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+//		Runnable c_Add = new Runnable() {
+//		};
+//		executorService.submit(c_Add);
+	}
+	@Override
+	public void run() {
+		while(true) {
+			serverLog(getCount());
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		};
-		executorService.submit(c_Add);
+		}
 	}
 	
 	private void serverLog(int count) {
@@ -121,8 +121,9 @@ class Server extends JFrame{
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		finish.addActionListener(e->{
-			flag = false;
-			executorService.shutdown();
+//			flag = false;
+			setFlag(false);
+//			executorService.shutdown();
 			server.stopServer();
 			System.exit(0);
 		});
@@ -150,8 +151,14 @@ class Server extends JFrame{
 	public static void main(String[] args) {
 		server.startServer();
 		
-		Server frame = new Server();
-		frame.setVisible(true);
+//		Server frame = new Server();
+		Runnable frame = new Server();
+		Thread t = new Thread(frame);
+		t.setDaemon(true);
+		t.start();
+		
+//		frame.setVisible(true);
+		((Component) frame).setVisible(true);
 		
 	}
 }
