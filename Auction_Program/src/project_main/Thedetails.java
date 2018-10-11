@@ -26,7 +26,9 @@ import java.awt.Container;
 public class Thedetails extends JDialog{
 	
 	private List<Item> itemList = new ArrayList<>();
-	private int index=0;
+	private int index;
+	
+	private Item item;
 	
 	public void setItemList(List<Item> itemList) {
 		this.itemList = itemList;
@@ -38,7 +40,7 @@ public class Thedetails extends JDialog{
 		return index;
 	}
 	
-	Didding ding = new Didding();
+	
 	
 	private Border border = BorderFactory.createTitledBorder("");
 	private Container con = this.getContentPane();
@@ -51,6 +53,8 @@ public class Thedetails extends JDialog{
 	private JPanel server_Output = new JPanel(); //입찰정보출력
 	private JPanel server_Bid = new JPanel();	//입찰 버튼
 	private JPanel server_Seller = new JPanel();//판매자
+	
+	private StringBuffer InformationBuffer = new StringBuffer();
 	
 	private JTextArea explanation_TextArea;	//제품 설명 출력 Text
 	private JTextArea output_TextArea;		//입찰 정보 출력 Text
@@ -104,7 +108,7 @@ public class Thedetails extends JDialog{
 		server_Finishday.add(new JLabel(date_Finish));
 		server_Finishday.setBorder(border);
 		
-		//서버에서 받은 입찰 태그
+		//입찰 태그
 		server_Information.setBounds(565, 10, 141, 26);
 		con.add(server_Information);
 		server_Information.setLayout(new GridLayout(1, 0, 0, 0));
@@ -119,6 +123,7 @@ public class Thedetails extends JDialog{
 		server_Bid.add(button_Bid);
 		server_Bid.setBorder(border);
 		button_Bid.addActionListener(e->{
+			Bidding ding = new Bidding(item);
 			ding.setVisible(true);
 		});
 		
@@ -141,8 +146,19 @@ public class Thedetails extends JDialog{
 		server_Explanation.add(explanation_Scroll);
 		
 		//서버에서 받은 입찰 정보 출력
-		output_TextArea = new JTextArea();
-		output_Scroll = new JScrollPane(output_TextArea);
+		item = itemList.get(index);
+		if(item.getBidsList().size() == 0 || item.getBidsList() == null) {
+			output_TextArea = new JTextArea();
+			output_Scroll = new JScrollPane(output_TextArea);
+		}else {
+			for(int i=item.getBidsList().size()-1; i>=0; i--) {
+				InformationBuffer.append(item.getBidsList().get(i).getIpAdd()+"\n");
+				InformationBuffer.append(item.getBidsList().get(i).getBid()+"\n");
+				InformationBuffer.append(item.getBidsList().get(i).getBidTime()+"\n\n");
+			}			
+			output_TextArea = new JTextArea(String.valueOf(InformationBuffer));
+			output_Scroll = new JScrollPane(output_TextArea);
+		}
 		server_Output.setBounds(505, 46, 267, 299);
 		con.add(server_Output);
 		server_Output.setLayout(new GridLayout(1, 0, 0, 0));

@@ -96,10 +96,12 @@ public class Enrollment extends JDialog{
 		this.setResizable(false);
 		con.setLayout(null);
 		
+		
 		// 이미지
 		panel.setBounds(0, 0, 417, 562);
 		con.add(panel);
 		panel.setLayout(null);
+		panel.setVisible(true);
 
 		// 제목
 		title.setBounds(429, 16, 57, 15);
@@ -217,6 +219,11 @@ public class Enrollment extends JDialog{
 		
 		//이미지 버튼 이벤트
 		open.addActionListener(e->{
+			panel.removeAll();		// 값 삭제	
+			panel.revalidate();		// 재정의		
+			panel.repaint();	
+			panel.setLayout(null);
+			panel.setVisible(false);
 			String str = e.getActionCommand();
 			if(str.equals("이미지 등록")) {
 				JFileChooser chooser = new JFileChooser();
@@ -228,6 +235,7 @@ public class Enrollment extends JDialog{
 				image.setBounds(12, 10, 393, 542);
 				panel.add(image);
 			}
+			panel.setVisible(true);
 		});
 	}
 }

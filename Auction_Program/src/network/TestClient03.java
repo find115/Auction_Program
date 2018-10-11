@@ -77,22 +77,20 @@ public class TestClient03 extends JFrame implements Runnable{
 		System.out.println(socket);
 		
 //		상품 등록		
-
-//		Date start  = new Date();
-//		Date finish = new Date();
-//		Format n = new SimpleDateFormat("y-MM-dd E HH:mm:ss");
-//		try {
-//			finish = (Date) n.parseObject("2020-10-01 월 01:41:30");
-//		}catch(Exception e) {
-//			e.printStackTrace();
-//		}
-//		ImageIcon image = new ImageIcon(System.getProperty("user.dir")+"\\Client\\nike.JPG");
-//		Item send = new Item("닉네임", "나이키모자", "깔끔", "모자", start, finish, 500, image);
+//			Date start  = new Date();
+//			Date finish = new Date();
+//			Format n = new SimpleDateFormat("y-MM-dd E HH:mm:ss");
+//			try {
+//				finish = (Date) n.parseObject("2020-10-01 월 01:41:30");
+//			}catch(Exception e) {
+//				e.printStackTrace();
+//			}
+//			ImageIcon image = new ImageIcon(System.getProperty("user.dir")+"\\Client\\nike.JPG");
+//			Item send = new Item("닉네임", "나이키모자", "깔끔", "모자", start, finish, 500, image);
 //
-//		boolean result = function.product_Registration(socket, send);
-//		
-//		System.out.println("상품등록 결과: "+result);
-		
+//			boolean result = function.product_Registration(socket, send);
+//			
+//			System.out.println("상품등록 결과: "+result);
 		
 		
 //		새로고침
@@ -109,10 +107,13 @@ public class TestClient03 extends JFrame implements Runnable{
 //			}
 //	  	List<Item>에서 ImageIcon을 꺼내와서 JLabel에 찍어보는 기능
 //		ImageIcon뿐만 아니라 다른 정보도 다 꺼낼 수 있음.
-	   	ImageIcon images = itemList.get(itemList.size()-1).getImage();
-	    label.setIcon(images);
-	    
-	    
+//	   	ImageIcon images = itemList.get(itemList.size()-1).getImage();
+//	    label.setIcon(images);
+			
+			System.out.println(itemList.get(12).getBidsList().size());
+			System.out.println(itemList.get(12).getBidsList().get(0).getBid());
+			System.out.println(itemList.get(12).getBidsList().get(0).getIpAdd());
+			System.out.println(itemList.get(12).getBidsList().get(0).getBidTime());
 		
 		
 //		입찰

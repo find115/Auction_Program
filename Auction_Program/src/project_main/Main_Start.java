@@ -129,7 +129,6 @@ class Main_Start extends JFrame implements Runnable{
 		panel.add(join_Membership);
 		
 		con.add(panel);
-		
 	}
 	
 

@@ -738,7 +738,7 @@ public class Menu extends JFrame implements ActionListener{
 				}
 			}else{
 				panel_3 = null;	//데이터 패널에 들어 있는 값 초기화
-				panel_3 = new JPanel[5];	//데이터 패널 사이즈 지정
+				panel_3 = new JPanel[itemList.size()];	//데이터 패널 사이즈 지정
 				for (int i = Integer.parseInt(c.getText()) * 5-5; i <= Integer.parseInt(c.getText()) * 5-1; i++) {
 					panel_3[i] = new JPanel();
 					main_Board.removeAll();
@@ -929,7 +929,7 @@ public class Menu extends JFrame implements ActionListener{
 				}
 			}else{
 				panel_3 = null;	//데이터 패널에 들어 있는 값 초기화
-				panel_3 = new JPanel[5];	//데이터 패널 사이즈 지정
+				panel_3 = new JPanel[itemList.size()];	//데이터 패널 사이즈 지정
 				for (int i = Integer.parseInt(d.getText()) * 5-5; i <= Integer.parseInt(d.getText()) * 5-1; i++) {
 					panel_3[i] = new JPanel();
 					main_Board.removeAll();
@@ -1120,7 +1120,7 @@ public class Menu extends JFrame implements ActionListener{
 				}
 			}else{
 				panel_3 = null;	//데이터 패널에 들어 있는 값 초기화
-				panel_3 = new JPanel[5];	//데이터 패널 사이즈 지정
+				panel_3 = new JPanel[itemList.size()];	//데이터 패널 사이즈 지정
 				for (int i = Integer.parseInt(e.getText()) * 5-5; i <= Integer.parseInt(e.getText()) * 5-1; i++) {
 					panel_3[i] = new JPanel();
 					main_Board.removeAll();
