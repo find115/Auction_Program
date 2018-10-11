@@ -1,16 +1,31 @@
 package project_main;
 
 import java.awt.Container;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import network.Client_Function;
+import network.Item;
+import network.Member;
 
-public class Join_Member extends JFrame{
+
+public class Join_Member extends JDialog{
 	private Container con = this.getContentPane();
 	
 	private JPanel panel = new JPanel();
@@ -40,6 +55,28 @@ public class Join_Member extends JFrame{
 	private JButton check = new JButton("확인");
 	private JButton cancel = new JButton("취소");
 	
+//	------------------------------------------------------------------
+	
+	private boolean[] judgment = new boolean[] {false,false};
+	private String password = new String();
+	private String password_Check = new String();
+	
+	private Client_Function function = new Client_Function();
+	
+	
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getPassword_Check() {
+		return password_Check;
+	}
+	public void setPassword_Check(String password_Check) {
+		this.password_Check = password_Check;
+	}
+
 	public Join_Member() {
 		this.event();
 		this.display();
@@ -102,10 +139,118 @@ public class Join_Member extends JFrame{
 	}
 
 	private void event() {
-		// TODO Auto-generated method stub
+		check_Id.addActionListener(e->{
+			Runnable run_e = new Runnable() {
+				@Override
+				public void run() {
+					// 전송 port, socket, inet 설정
+					InetAddress inet = null;
+					try {
+						inet = InetAddress.getByName("localhost");
+					} catch (UnknownHostException e2) {
+						e2.printStackTrace();
+					}
+					int port = 50000;
+					Socket socket = null;
+					socket = function.socket_Creation(inet, port);
+					judgment[0] = function.duplicate_Confirmation(socket, input_Id.getText());
+					if(judgment[0]) {
+						JOptionPane.showMessageDialog(Join_Member.this, "사용가능한 아이디 입니다.", "알림",
+							JOptionPane.INFORMATION_MESSAGE);
+					}
+					else {
+						JOptionPane.showMessageDialog(Join_Member.this, "사용 불가능한 아이디 입니다.", "경고", JOptionPane.WARNING_MESSAGE);
+					}
+				}
+			};
+			Thread t = new Thread(run_e);
+			t.setDaemon(true);
+			t.start();
+		});
 		
+		check_Nick.addActionListener(e->{
+			Runnable run_e = new Runnable() {
+				@Override
+				public void run() {
+					// 전송 port, socket, inet 설정
+					InetAddress inet = null;
+					try {
+						inet = InetAddress.getByName("localhost");
+					} catch (UnknownHostException e2) {
+						e2.printStackTrace();
+					}
+					int port = 50000;
+					Socket socket = null;
+					socket = function.socket_Creation(inet, port);
+					judgment[1] = function.n_Duplicate_Confirmation(socket, input_Nick.getText());
+					if(judgment[1]) {
+						JOptionPane.showMessageDialog(Join_Member.this, "사용가능한 닉네임 입니다.", "알림",
+							JOptionPane.INFORMATION_MESSAGE);
+					}
+					else {
+						JOptionPane.showMessageDialog(Join_Member.this, "사용 불가능한 닉네임 입니다.", "경고", JOptionPane.WARNING_MESSAGE);
+					}
+				}
+			};
+			Thread t = new Thread(run_e);
+			t.setDaemon(true);
+			t.start();
+		});
+		
+		check.addActionListener(e->{
+			setPassword(String.valueOf(input_Pw.getPassword()));
+			setPassword_Check(String.valueOf(input_Pw_Check.getPassword()));
+			
+			Date birth = function.stIsBirth(input_Birth.getText());
+			Member mb =new Member(input_Id.getText(), input_Nick.getText(), getPassword()
+					, input_Phone.getText(), input_Email.getText(), birth);
+			boolean type = function.type_Test(mb);
+			
+			if(type) {
+				JOptionPane.showMessageDialog(Join_Member.this, "형식 불일치", "경고", JOptionPane.WARNING_MESSAGE);
+			}
+			else if(!judgment[0] || !judgment[1]) {
+				JOptionPane.showMessageDialog(Join_Member.this, "ID,닉네임을 중복확인 하세요.", "경고", JOptionPane.WARNING_MESSAGE);
+			}
+			else if(!getPassword().equals(getPassword_Check())) {
+				JOptionPane.showMessageDialog(Join_Member.this, "패스워드와 패스워드 재입력이 일치하지 않습니다.", "경고", JOptionPane.WARNING_MESSAGE);
+			}
+			else if(birth == null) {
+				JOptionPane.showMessageDialog(Join_Member.this, "생년월일을 다시입력하세요.", "경고", JOptionPane.WARNING_MESSAGE);
+			}
+			else {
+				Runnable run = new Runnable() {
+					@Override
+					public void run() {
+						// 전송 port, socket, inet 설정
+						InetAddress inet = null;
+						try {
+							inet = InetAddress.getByName("localhost");
+						} catch (UnknownHostException e2) {
+							e2.printStackTrace();
+						}
+						int port = 50000;
+						Socket socket = null;
+						socket = function.socket_Creation(inet, port);
+						Date birth = function.stIsBirth(input_Birth.getText());
+						Member mb =new Member(input_Id.getText(), input_Nick.getText(), getPassword()
+								, input_Phone.getText(), input_Email.getText(), birth);
+						boolean result = function.join_Membership(socket, judgment, mb);
+						if(result) {
+							JOptionPane.showMessageDialog(Join_Member.this, "회원가입을 완료하였습니다.", "알림",
+									JOptionPane.INFORMATION_MESSAGE);
+						}
+						else {
+							JOptionPane.showMessageDialog(Join_Member.this, "회원가입을 실패하였습니다.", "경고", JOptionPane.WARNING_MESSAGE);
+						}
+					}
+				};
+				Thread t = new Thread(run);
+				t.setDaemon(true);
+				t.start();
+				this.setVisible(false);
+				this.dispose();
+			}
+		});
 	}
-
-	
-	
 }

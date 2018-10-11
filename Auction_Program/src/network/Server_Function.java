@@ -304,7 +304,9 @@ public class Server_Function {
 				e.printStackTrace();
 			}
 			try {
-				mb = (Member)in.readObject();//이걸 처음에 받는게 더 안정적일듯
+				mb = (Member)in.readObject();
+				Date now = new Date();
+				mb.setJoin(now);
 				memberList.add(mb);
 				file.fileWriter_Member(memberList);
 				
@@ -351,8 +353,11 @@ public class Server_Function {
 					check(socket, isRegistration(), out);
 					
 					resetServerLog();//
-					serverLog.append(id);
-					serverLog.append("님이 ");
+					serverLog.append(id);//
+					serverLog.append("님이  ");//
+					serverLog.append(socket.getRemoteSocketAddress());//
+					serverLog.append("에서 [로그인] 하였습니다.");//
+					setActivity(activity+1);//
 					
 					terminate_Socket(socket, in, out);
 				}
@@ -371,6 +376,7 @@ public class Server_Function {
 	
 	public void work(int work_Number, Socket socket, List<Item> itemList, ObjectInputStream in, ObjectOutputStream out,
 			List<Member> memberList, List<Connection> list) {
+		
 		// TODO Auto-generated method stub
 		System.out.println("work 실행됨");
 
@@ -393,24 +399,27 @@ public class Server_Function {
 			break;
 		case DUPLICATE_CONFIRMATION:// 아이디 중복확인
 			duplicate_Confirmation(socket, memberList, in, out);
+			resetServerLog();//
 			serverLog.append(socket.getRemoteSocketAddress());//
 			serverLog.append("에서 [아이디 중복확인] 하였습니다.");//
+			setActivity(activity+1);//
 			break;
 		case N_DUPLICATE_CONFIRMATION://닉네임 중복확인
 			n_Duplicate_Confirmation(socket, memberList, in, out);
+			resetServerLog();//
 			serverLog.append(socket.getRemoteSocketAddress());//
 			serverLog.append("에서 [닉네임 중복확인] 하였습니다.");//
+			setActivity(activity+1);//
 			break;
 		case JOIN_MEMBERSHIP: // 회원가입
 			join_Membership(socket, memberList, in, out);
+			resetServerLog();//
 			serverLog.append(socket.getRemoteSocketAddress());//
 			serverLog.append("에서 [회원가입] 하였습니다.");//
+			setActivity(activity+1);//
 			break;
 		case LOGIN:	// 로그인	
 			login(socket, in, out, memberList);
-			serverLog.append(socket.getRemoteSocketAddress());//
-			serverLog.append("에서 [로그인] 하였습니다.");//
-			setActivity(activity+1);//
 			break;
 		case MEMBERSHIP_WITHDRAWAL: // 회원탈퇴
 			break;

@@ -13,6 +13,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 
 /**
  * 서버를 실행시키는 클래스
@@ -149,6 +150,12 @@ class Server extends JFrame implements Runnable{
 	}
 	
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel("com.jtattoo.plaf.mint.MintLookAndFeel");
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 		server.startServer();
 		
 //		Server frame = new Server();

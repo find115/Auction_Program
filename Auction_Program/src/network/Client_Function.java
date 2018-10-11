@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Å¬¶óÀÌ¾ğÆ® ±â´É Å¬·¡½º
@@ -204,6 +205,16 @@ public class Client_Function implements Serializable{
 		return date;
 	}
 	
+	public Date stIsBirth(String inputDate) {
+		Date date = null;
+		try{
+			date = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate);
+		}catch(Exception e) {
+			date = null;
+		}
+		return date;
+	}
+	
 //	»õ·Î°íÄ§ ¸Ş¼Òµå
 //	Å¬¶óÀÌ¾ğÆ®¸¦ ½ÃÀÛ½Ã ½ÇÇàµÇ¾î¾ß ÇÔ.
 //	¼­¹ö·Î ºÎÅÍ Date¿Í ItemList¸¦ ¹Ş¾Æ¼­ return.
@@ -306,6 +317,41 @@ public class Client_Function implements Serializable{
 		return check;
 	}
 	
+//	È¸¿ø°¡ÀÔ Çü½Ä°Ë»ç ¸Ş¼Òµå 
+	public boolean type_Test(Member mb) {
+		boolean[] pattern = new boolean[] {false,false,false,false,false};
+		boolean check = false;
+		//id ¼ıÀÚ, ¾ËÆÄºª¼Ò¹®ÀÚ 8~15ÀÚ
+		String regex0 = "^[0-9a-z]{8,15}$";
+		pattern[0] = Pattern.matches(regex0, mb.getId());
+		//´Ğ³×ÀÓ  ÇÑ±Û 2~10±ÛÀÚ
+		String regex1 = "^[°¡-ÆR]{2,10}$";
+		pattern[1] = Pattern.matches(regex1, mb.getNickName());
+		//pw ¼ıÀÚ, ¾ËÆÄºª¼Ò¹®ÀÚ,´ë¹®ÀÚ 8~20ÀÚ
+		String regex2 = "^[0-9A-Za-z!@#$]{8,20}$";
+		pattern[2] = Pattern.matches(regex2, mb.getPassword());
+		//ÇÚµåÆù ¹øÈ£ : 01(0,1,6,7,8,9) - 4ÀÚ¸® - 4ÀÚ¸®
+		String regex3 = "^01[016-9]-?[0-9]{4}-?[0-9]{4}$";
+		pattern[3] = Pattern.matches(regex3, mb.getPhoneNumber());
+//		- @¸¦ ±âÁØÀ¸·Î ¾ÕÂÊÀº ¾ËÆÄºª,¼ıÀÚ,-,_¸¦ 8~20ÀÚ ÀÌ³»
+//		- @¸¦ ±âÁØÀ¸·Î µÚÂÊÀº ¾Æ·¡¿Í °°ÀÌ °Ë»ç
+//			3±ÛÀÚ ÀÌ»ó 10±ÛÀÚ ÀÌ³»ÀÇ ¿µ¹®+¼ıÀÚ ÀÌÈÄ¿¡ ¾Æ·¡Ã³·³ ±¸ÇöµÈ °æ¿ì¸¸ Çã¿ë
+//			**********.com
+//			**********.co.kr
+//			**********.net
+//			**********.go.kr
+//			**********.ac.kr
+		String regex4 = "^[a-z][a-z\\d-_]{7,19}@[a-z][a-z\\d]{2,9}(\\.co\\.kr|\\.com|\\.net|\\.ac\\.kr|\\.go\\.kr)$";
+		pattern[4] = Pattern.matches(regex4, mb.getEmail());
+		int count = 0;
+		for(int i =0; i<pattern.length; i++) {
+			if(pattern[i]==true)count++;
+		}
+		if(count==4) check = true;
+		else check = false;
+		return check;
+	}
+	
 //	È¸¿ø°¡ÀÔ ¸Ş¼Òµå
 	public boolean join_Membership(Socket socket, boolean[] judgment, Member mb) {
 		out = setOut(out, socket);
@@ -313,19 +359,18 @@ public class Client_Function implements Serializable{
 		sendWork(JOIN_MEMBERSHIP, out);
 		sendObject(judgment, out);
 		boolean isStart = receive(in);
-		if(isStart) {
+		if (isStart) {
 			try {
 				out.writeObject(mb);
 				out.flush();
 				boolean check = receive(in);
 				terminate_Socket(socket, in, out);
 				return check;
-			}catch(Exception e) {
+			} catch (Exception e) {
 				terminate_Socket(socket, in, out);
 				return false;
 			}
-		}
-		else {
+		} else {
 			terminate_Socket(socket, in, out);
 			return false;
 		}
@@ -370,7 +415,7 @@ public class Client_Function implements Serializable{
 		
 		List<Item> lowerList = new ArrayList<>();
 		List<Item> higherList = new ArrayList<>(); 
-		for (int i = 1; i < searched_ItemList.size(); i++) {//
+		for (int i = 1; i < searched_ItemList.size(); i++) {
 			Item number = searched_ItemList.get(i);
 			if (number.getTitle().indexOf(input) < pivot.getTitle().indexOf(input)) {
 				lowerList.add(number);

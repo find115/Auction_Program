@@ -14,9 +14,11 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 import network.Client_Function;
 import network.Item;
@@ -140,37 +142,56 @@ class Main_Start extends JFrame implements Runnable{
 			if(e.getSource()==logIn) {
 //				여기서 Menu를 선언할떄 아이템리스트와 서버시간을 같이 넘겨주면서 생성합니다.
 //				서버로 부터 itemList와 server_Time을 받을때 까지 기다렸다가 Menu를 실행합니다.
-				Runnable wait = new Runnable() {
+//				Runnable wait = new Runnable() {
+//					@Override
+//					public void run() {
+//						while(getItemList()==null && getServer_Time()==null) {
+//						}
+//					}
+//				};
+//				Thread t = new Thread(wait);
+//				t.setDaemon(true);
+//				t.start();
+			
+			
+			
+				Runnable login_Start = new Runnable() {
 					@Override
 					public void run() {
 						while(getItemList()==null && getServer_Time()==null) {
 						}
+						
+						Client_Function function = new Client_Function();
+						InetAddress inet = null;
+						int port = 50000;
+						Socket socket = null;
+						try {
+							inet = InetAddress.getByName("localhost");
+						}catch(Exception e) {
+							e.printStackTrace();
+						}
+						socket = function.socket_Creation(inet, port);
+						boolean check = function.login(socket, String.valueOf(id_Input.getText()), String.valueOf(pw_Input.getPassword()));
+						if(check) {
+							Menu menu;
+							try {
+								menu = new Menu(getItemList(), getServer_Time());
+								menu.setVisible(true);
+							}catch(Exception err) {
+								
+							}
+						}
+						else {
+							JOptionPane.showMessageDialog(Main_Start.this, "로그인 정보가 일치하지 않습니다.", "경고", JOptionPane.WARNING_MESSAGE);
+						}
 					}
 				};
-				Thread t = new Thread(wait);
+				Thread t = new Thread(login_Start);
 				t.setDaemon(true);
 				t.start();
-				Menu menu;
-				try {
-					menu = new Menu(getItemList(), getServer_Time());
-					menu.setVisible(true);
-				}catch(Exception err) {
-					try {
-						while(flag) {
-							Thread.sleep(100);//객체를 다 받을때 까지 0.1초식 계속 대기함.
-							if(getItemList()!=null && getServer_Time()!=null)break;
-						}
-						setFlag(false);
-						menu = new Menu(getItemList(), getServer_Time());
-						menu.setVisible(true);
-					} catch (InterruptedException e1) {
-						setFlag(false);
-						menu = new Menu(getItemList(), getServer_Time());
-						menu.setVisible(true);
-					}
-				}
 			}
 		});
+		
 		
 		join_Membership.addActionListener(e->{
 			if(e.getSource()==join_Membership) {
@@ -181,6 +202,12 @@ class Main_Start extends JFrame implements Runnable{
 	}
 	
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel("com.jtattoo.plaf.mint.MintLookAndFeel");
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 		Runnable win = new Main_Start();
 		Thread t = new Thread(win);
 		t.setDaemon(true);

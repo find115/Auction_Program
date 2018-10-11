@@ -15,7 +15,8 @@ public class Member implements Serializable{
 	private String password;
 	private String phoneNumber;
 	private String email;
-	private String birth;
+	
+	private Date birth;
 	
 	private Date join;	//가입한 날짜
 	
@@ -50,10 +51,10 @@ public class Member implements Serializable{
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getBirth() {
+	public Date getBirth() {
 		return birth;
 	}
-	public void setBirth(String birth) {
+	public void setBirth(Date birth) {
 		this.birth = birth;
 	}
 	public Date getJoin() {
@@ -66,7 +67,17 @@ public class Member implements Serializable{
 	public Member() {
 		super();
 	}
-	public Member(String id, String nickName, String password, String phoneNumber, String email, String birth,
+	public Member(String id, String nickName, String password, String phoneNumber, String email, Date birth) {
+		super();
+		this.id = id;
+		this.nickName = nickName;
+		this.password = password;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.birth = birth;
+	}
+	
+	public Member(String id, String nickName, String password, String phoneNumber, String email, Date birth,
 			Date join) {
 		super();
 		this.id = id;
@@ -77,6 +88,4 @@ public class Member implements Serializable{
 		this.birth = birth;
 		this.join = join;
 	}
-	
-	
 }
