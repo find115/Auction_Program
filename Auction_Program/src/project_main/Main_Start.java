@@ -136,6 +136,7 @@ class Main_Start extends JFrame implements Runnable{
 
 //	버튼을 클릭할때 이벤트
 	private void event() {
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 //		con.add(logIn);
 		this.add(logIn);
 		logIn.addActionListener(e->{
