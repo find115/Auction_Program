@@ -23,17 +23,17 @@ public class Server_Creation {
 	private boolean flag = true;
 	private String c_Address =  "초기값";//접속한 클라이언트 아이피주소
 //	접속자수 테스트
-	ExecutorService executorService = Executors.newFixedThreadPool(1);
+	ExecutorService executorService = Executors.newFixedThreadPool(5);
 	
 	Server_Function function = new Server_Function();
 	
-	Item item = new Item();
+//	Item item = new Item();
 	
 	FileIo file = new FileIo();
 	
-	Bids bids = new Bids();
+//	Bids bids = new Bids();
 	
-	Member mb = new Member();
+//	Member mb = new Member();
 		
 	private List<Item> itemList = new ArrayList<>();//아이템을 받을 리스트
 	
