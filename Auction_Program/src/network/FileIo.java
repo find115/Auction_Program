@@ -100,6 +100,41 @@ public class FileIo {
 			System.out.println("회원 파일 읽는 중 예외 발생");
 			return null;
 		}
-
+	}
+	
+//	서버 주소 정보를 쓰는 메소드
+	public void fileWriter_ServerAddress(String address) {
+		
+		File target = new File(System.getProperty("user.dir")+"\\Client\\server.Address");
+		
+		ObjectOutputStream object;
+		try {
+			object = new ObjectOutputStream
+					(new BufferedOutputStream(new FileOutputStream(target)));
+			object.writeObject(address);
+			object.flush();
+			object.close();
+		}catch(IOException e) {
+			System.out.println("서버주소 저장중 예외 발생");
+			e.printStackTrace();
+		}
+	}
+	
+//	서버 주소 정보를 읽어오는 메소드
+//	@SuppressWarnings("unchecked")
+	public String fileReader_ServerAddress() {
+		File target = new File(System.getProperty("user.dir")+"\\Client\\server.Address");
+		String add = null;
+		ObjectInputStream object;
+		try {
+			object = new ObjectInputStream(
+					new BufferedInputStream(new FileInputStream(target)));
+			add= (String) object.readObject();//캐스팅 필요
+			object.close();
+			return add;
+		}catch(Exception e) {
+			System.out.println("서버주소 파일 읽는 중 예외 발생");
+			return null;
+		}
 	}
 }
