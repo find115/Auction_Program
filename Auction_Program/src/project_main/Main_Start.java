@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import network.Client_Function;
+import network.FileIo;
 import network.Item;
 
 class Main_Start extends JFrame implements Runnable{
@@ -30,6 +31,8 @@ class Main_Start extends JFrame implements Runnable{
 	
 	private boolean flag = true;
 	
+	FileIo file = new FileIo();
+	
 	//새로고침
 	public void run() {
 		Client_Function function  = new Client_Function();
@@ -37,7 +40,7 @@ class Main_Start extends JFrame implements Runnable{
 		int port = 50000;
 		Socket socket = null;
 		try {
-			inet = InetAddress.getByName("localhost");
+			inet = InetAddress.getByName(file.fileReader_ServerAddress());
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
