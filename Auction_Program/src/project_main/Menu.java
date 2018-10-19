@@ -1,10 +1,17 @@
 package project_main;
 
+import java.awt.BorderLayout;
+import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -51,6 +58,9 @@ public class Menu extends JFrame implements ActionListener{
 	private int count_page;
 	private int count_max;
 	private int count_least=1;
+	
+	private ImageIcon icon;
+	private Image image;
 	
 	private int end_data;			//마지막 데이터 값
 	private int page_number = 1;	//페이지 번호 값
@@ -331,405 +341,12 @@ public class Menu extends JFrame implements ActionListener{
 	      }
 	      
 	      int panel_size = 0;               //데이터 패널(리스트의 상품 등록되어 있는 상품 패널)이동 값 초기화
-	      if(1*5-4 <= itemList.size() && 1*5 > itemList.size()){
-	         panel_3 = null;                     //데이터 패널에 들어 있는 값 초기화
-	         panel_3 = new JPanel[itemList.size()];   //데이터 패널 5 값으로 지정(데이터 5개 생성 해야하므로)
-	         //현재 a버튼 값을 참조하여 현재 총 데이터량은 5이하 이므로 리스트 크기 만큼 반복문
-	         //-> 새로운 패널 배열 생성, 오른쪽 메인 패널 초기화
-	         for(int i=1*5-5; i<itemList.size(); i++) {
-	            panel_3[i] = new JPanel();      //새로운 패널을 패널 배열 순서 대로 생성
-	            main_Board.removeAll();         //메인 패널에 있는 값 삭제   
-	            main_Board.revalidate();      //메인 패널 재정의      
-	            main_Board.repaint();         //메인 패널 재 생성
-	            main_Board.setLayout(null);
-	         }
-	         //-> 데이터 패널 값 초기화, 데이터 패널 테두리 생성, 데이터 패널 이동 값, 메인 패널에 데이터 패널 추가
-	         //-> 컨테이너 패널에 메인 패널 추가
-	         for(int i=1*5-5; i<itemList.size(); i++) {
-	            panel_3[i].setLayout(null);      //데이터 패널 위치, 크기 설정이므로 null
-	            panel_3[i].setBorder(border);   //데이터 패널 테두리 설정
-	            panel_3[i].setBounds(0, (70+panel_size), 1059, 115);   //위치, 크기 설정(여기서 size는 1개씩 점점 아래로 찍기 위한 값)
-	            panel_3[i].setName(Integer.toString(i));
-	            result.setText("검색 결과 : " + itemList.size()+"개가 확인 되었습니다.");
-	            result.setBounds(290, 0, 367, 37);
-	            result.setEditable(false);
-	            result.setBorder(border);
-	            main_Board.add(result);
-	            main_Board.setBounds(205, 100, 2118, 1454);      //메인 패널 위치, 크기 설정
-	            panel_size += 130;            //위치 이동하기 위한 130씩 증가 값 지정
-	            main_Board.add(panel_3[i]);      //이동한 데이터 패널을 메인 패널에 생성      
-	            con.add(main_Board);         //컨테이너에 메인 패널 생성
-	            main_Board.setVisible(false);
-	         }
-	         //-> 아이템 리스트 값에 있는 데이터들을 하나의 데이터 패널안에 추가
-	         for(int i=1*5-5; i<itemList.size(); i++) {
-	            //이미지, 제목 라벨, 시작한 가격 라벨, 현재 최대 입찰가 라벨 등등... 
-	            //-> 데이터 패널 배열에 새롭게 생성
-	            //-> a,b,c,d,e 버튼 액션은 모두 동일
-	            ImageIcon imic = new ImageIcon();
-	            imic = itemList.get(i).getImage();
-	            lblNewLabel_1 = new JLabel(imic);
-	            lblNewLabel_1.setBounds(0, 0, 341, 115);
-	            panel_3[i].add(lblNewLabel_1);
-
-	            lblNewLabel_2 = new JLabel("제목 : " + itemList.get(i).getTitle());
-	            lblNewLabel_2.setBounds(353, 1, 293, 35);
-	            panel_3[i].add(lblNewLabel_2);
-	            
-	            lblNewLabel_3 = new JLabel("시작한 가격 : " + itemList.get(i).getPrice());
-	            lblNewLabel_3.setBounds(353, 46, 254, 24);
-	            panel_3[i].add(lblNewLabel_3);
-	            
-	            lblNewLabel_4 = new JLabel("현재 최대 입찰가 : ");
-	            lblNewLabel_4.setBounds(353, 83, 254, 24);
-	            panel_3[i].add(lblNewLabel_4);
-	            
-	            lblNewLabel_5 = new JLabel("카테고리 : " + itemList.get(i).getCategory());
-	            lblNewLabel_5.setBounds(658, 21, 116, 15);
-	            panel_3[i].add(lblNewLabel_5);
-	            
-	            lblNewLabel_6 = new JLabel("시작일 : " + itemList.get(i).getStartDate());
-	            lblNewLabel_6.setBounds(619, 46, 155, 24);
-	            panel_3[i].add(lblNewLabel_6);
-	            
-	            lblNewLabel_7 = new JLabel("종료일 : " + itemList.get(i).getFinishDate());
-	            lblNewLabel_7.setBounds(619, 83, 155, 24);
-	            panel_3[i].add(lblNewLabel_7);
-	            
-	            lblNewLabel_8 = new JLabel("ID : " + itemList.get(i).getId());
-	            lblNewLabel_8.setBounds(847, 6, 200, 24);
-	            panel_3[i].add(lblNewLabel_8);
-	            
-	            lblNewLabel_9 = new JLabel("입찰 횟수 : ");
-	            lblNewLabel_9.setBounds(847, 36, 143, 24);
-	            panel_3[i].add(lblNewLabel_9);
-	            
-	            JButton details = new JButton("상세 보기");
-	            details.setName(Integer.toString(i));
-	            details.setBounds(847, 70, 143, 35);
-	            panel_3[i].add(details);
-	            details.addActionListener(e->{
-//	            if (panel_3[taget].getName().equals(String.valueOf(taget))) {
-//	               Thedetails det = new Thedetails(getItemList(), taget);
-	               if(1*5-5 == Integer.parseInt(details.getName())) {
-	                  Thedetails det = new Thedetails(getItemList(), 1*5-5);
-	                  det.setVisible(true);
-	               }else if(1*5-4 == Integer.parseInt(details.getName())) {
-	                  Thedetails det = new Thedetails(getItemList(), 1*5-4);
-	                  det.setVisible(true);
-	               }else if(1*5-3 == Integer.parseInt(details.getName())) {
-	                  Thedetails det = new Thedetails(getItemList(), 1*5-3);
-	                  det.setVisible(true);
-	               }else if(1*5-2 == Integer.parseInt(details.getName())) {
-	                  Thedetails det = new Thedetails(getItemList(), 1*5-2);
-	                  det.setVisible(true);
-	               }else if(1*5-1 == Integer.parseInt(details.getName())) {
-	                  Thedetails det = new Thedetails(getItemList(), 1*5-1);
-	                  det.setVisible(true);
-	               }
-//	               }
-	            });
-	         }
-	      }else{
-	         panel_3 = null;   //데이터 패널에 들어 있는 값 초기화
-	         panel_3 = new JPanel[itemList.size()];   //데이터 패널 사이즈 지정
-	         previous_Page.setVisible(true);
-	         next_Page.setVisible(true);
-	         for (int i = 1 * 5-5; i <= 1 * 5-1; i++) {
-	            panel_3[i] = new JPanel();
-	            main_Board.removeAll();
-	            main_Board.revalidate();
-	            main_Board.repaint();
-	            main_Board.setLayout(null);
-	         }
-	         for (int i = 1 * 5-5; i <= 1 * 5-1; i++) {
-	            panel_3[i].setLayout(null);
-	            panel_3[i].setBounds(0, (70 + panel_size), 1059, 115);
-	            panel_3[i].setName(Integer.toString(i));
-	            result.setText("검색 결과 : " + itemList.size()+"개가 확인 되었습니다.");
-	            result.setBounds(290, 0, 367, 37);
-	            result.setEditable(false);
-	            result.setBorder(border);
-	            main_Board.add(result);
-	            main_Board.setBounds(205, 100, 2118, 1454);
-	            panel_3[i].setBorder(border);
-	            panel_size += 130;
-	            main_Board.add(panel_3[i]);
-	            con.add(main_Board);
-	            main_Board.setVisible(false);
-	         }
-	         for(int i=1 * 5-5; i <= 1 * 5-1; i++) {
-	            ImageIcon imic = new ImageIcon();
-	            imic = itemList.get(i).getImage();
-	            lblNewLabel_1 = new JLabel(imic);
-	            lblNewLabel_1.setBounds(0, 0, 341, 115);
-	            panel_3[i].add(lblNewLabel_1);
-
-	            lblNewLabel_2 = new JLabel("제목 : " + itemList.get(i).getTitle());
-	            lblNewLabel_2.setBounds(353, 1, 293, 35);
-	            panel_3[i].add(lblNewLabel_2);
-	            
-	            lblNewLabel_3 = new JLabel("시작한 가격 : " + itemList.get(i).getPrice());
-	            lblNewLabel_3.setBounds(353, 46, 254, 24);
-	            panel_3[i].add(lblNewLabel_3);
-	            
-	            lblNewLabel_4 = new JLabel("현재 최대 입찰가 : ");
-	            lblNewLabel_4.setBounds(353, 83, 254, 24);
-	            panel_3[i].add(lblNewLabel_4);
-	            
-	            lblNewLabel_5 = new JLabel("카테고리 : " + itemList.get(i).getCategory());
-	            lblNewLabel_5.setBounds(658, 21, 116, 15);
-	            panel_3[i].add(lblNewLabel_5);
-	            
-	            lblNewLabel_6 = new JLabel("시작일 : " + itemList.get(i).getStartDate());
-	            lblNewLabel_6.setBounds(619, 46, 155, 24);
-	            panel_3[i].add(lblNewLabel_6);
-	            
-	            lblNewLabel_7 = new JLabel("종료일 : " + itemList.get(i).getFinishDate());
-	            lblNewLabel_7.setBounds(619, 83, 155, 24);
-	            panel_3[i].add(lblNewLabel_7);
-	            
-	            lblNewLabel_8 = new JLabel("ID : " + itemList.get(i).getId());
-	            lblNewLabel_8.setBounds(847, 6, 200, 24);
-	            panel_3[i].add(lblNewLabel_8);
-	            
-	            lblNewLabel_9 = new JLabel("입찰 횟수 : ");
-	            lblNewLabel_9.setBounds(847, 36, 143, 24);
-	            panel_3[i].add(lblNewLabel_9);
-	            
-	            JButton details = new JButton("상세 보기");
-	            details.setName(String.valueOf(i));
-	            details.setBounds(847, 70, 143, 35);
-	            panel_3[i].add(details);
-	            details.addActionListener(e->{
-	            if (1 * 5 - 5 == Integer.parseInt(details.getName())) {
-	               Thedetails det = new Thedetails(getItemList(), 1 * 5 - 5);
-	               det.setVisible(true);
-	            } else if (1 * 5 - 4 == Integer.parseInt(details.getName())) {
-	               Thedetails det = new Thedetails(getItemList(), 1 * 5 - 4);
-	               det.setVisible(true);
-	            } else if (1 * 5 - 3 == Integer.parseInt(details.getName())) {
-	               Thedetails det = new Thedetails(getItemList(), 1 * 5 - 3);
-	               det.setVisible(true);
-	            } else if (1 * 5 - 2 == Integer.parseInt(details.getName())) {
-	               Thedetails det = new Thedetails(getItemList(), 1 * 5 - 2);
-	               det.setVisible(true);
-	            } else if (1 * 5 - 1 == Integer.parseInt(details.getName())) {
-	               Thedetails det = new Thedetails(getItemList(), 1 * 5 - 1);
-	               det.setVisible(true);
-	            }
-	            });
-	         }
-	      }
-	      main_Board.setVisible(true);
-		
-		board_Page.add(a);
-		a.addActionListener(e_a->{
-				int size = 0;					//데이터 패널(리스트의 상품 등록되어 있는 상품 패널)이동 값 초기화
-				if(itemList.size() <= 0) {		
-					JOptionPane.showMessageDialog(null, "데이터가 없습니다.", "경고 !", JOptionPane.WARNING_MESSAGE);
-				}	
-				//데이터 리스트 값이 5이하의 값만 존재 할 경우
-				else if(Integer.parseInt(a.getText())*5-4 <= itemList.size() && Integer.parseInt(a.getText())*5 > itemList.size()){
-					panel_3 = null;							//데이터 패널에 들어 있는 값 초기화
-					panel_3 = new JPanel[itemList.size()];	//데이터 패널 5 값으로 지정(데이터 5개 생성 해야하므로)
-					//현재 a버튼 값을 참조하여 현재 총 데이터량은 5이하 이므로 리스트 크기 만큼 반복문
-					//-> 새로운 패널 배열 생성, 오른쪽 메인 패널 초기화
-					for(int i=Integer.parseInt(a.getText())*5-5; i<itemList.size(); i++) {
-						panel_3[i] = new JPanel();		//새로운 패널을 패널 배열 순서 대로 생성
-						main_Board.removeAll();			//메인 패널에 있는 값 삭제	
-						main_Board.revalidate();		//메인 패널 재정의		
-						main_Board.repaint();			//메인 패널 재 생성
-						main_Board.setLayout(null);
-					}
-					//-> 데이터 패널 값 초기화, 데이터 패널 테두리 생성, 데이터 패널 이동 값, 메인 패널에 데이터 패널 추가
-					//-> 컨테이너 패널에 메인 패널 추가
-					for(int i=Integer.parseInt(a.getText())*5-5; i<itemList.size(); i++) {
-						panel_3[i].setLayout(null);		//데이터 패널 위치, 크기 설정이므로 null
-						panel_3[i].setBorder(border);	//데이터 패널 테두리 설정
-						panel_3[i].setBounds(0, (70+size), 1059, 115);	//위치, 크기 설정(여기서 size는 1개씩 점점 아래로 찍기 위한 값)
-						panel_3[i].setName(Integer.toString(i));
-						result.setText("검색 결과 : " + itemList.size()+"개가 확인 되었습니다.");
-						result.setBounds(290, 0, 367, 37);
-						result.setEditable(false);
-						result.setBorder(border);
-						main_Board.add(result);
-						main_Board.setBounds(205, 100, 2118, 1454);		//메인 패널 위치, 크기 설정
-						size += 130;					//위치 이동하기 위한 130씩 증가 값 지정
-						main_Board.add(panel_3[i]);		//이동한 데이터 패널을 메인 패널에 생성		
-						con.add(main_Board);			//컨테이너에 메인 패널 생성
-						main_Board.setVisible(false);
-					}
-					//-> 아이템 리스트 값에 있는 데이터들을 하나의 데이터 패널안에 추가
-					for(int i=Integer.parseInt(a.getText())*5-5; i<itemList.size(); i++) {
-						//이미지, 제목 라벨, 시작한 가격 라벨, 현재 최대 입찰가 라벨 등등... 
-						//-> 데이터 패널 배열에 새롭게 생성
-						//-> a,b,c,d,e 버튼 액션은 모두 동일
-						ImageIcon imic = new ImageIcon();
-						imic = itemList.get(i).getImage();
-						lblNewLabel_1 = new JLabel(imic);
-						lblNewLabel_1.setBounds(0, 0, 341, 115);
-						panel_3[i].add(lblNewLabel_1);
-
-						lblNewLabel_2 = new JLabel("제목 : " + itemList.get(i).getTitle());
-						lblNewLabel_2.setBounds(353, 1, 293, 35);
-						panel_3[i].add(lblNewLabel_2);
-						
-						lblNewLabel_3 = new JLabel("시작한 가격 : " + itemList.get(i).getPrice());
-						lblNewLabel_3.setBounds(353, 46, 254, 24);
-						panel_3[i].add(lblNewLabel_3);
-						
-						lblNewLabel_4 = new JLabel("현재 최대 입찰가 : ");
-						lblNewLabel_4.setBounds(353, 83, 254, 24);
-						panel_3[i].add(lblNewLabel_4);
-						
-						lblNewLabel_5 = new JLabel("카테고리 : " + itemList.get(i).getCategory());
-						lblNewLabel_5.setBounds(658, 21, 116, 15);
-						panel_3[i].add(lblNewLabel_5);
-						
-						lblNewLabel_6 = new JLabel("시작일 : " + itemList.get(i).getStartDate());
-						lblNewLabel_6.setBounds(619, 46, 155, 24);
-						panel_3[i].add(lblNewLabel_6);
-						
-						lblNewLabel_7 = new JLabel("종료일 : " + itemList.get(i).getFinishDate());
-						lblNewLabel_7.setBounds(619, 83, 155, 24);
-						panel_3[i].add(lblNewLabel_7);
-						
-						lblNewLabel_8 = new JLabel("ID : " + itemList.get(i).getId());
-						lblNewLabel_8.setBounds(847, 6, 200, 24);
-						panel_3[i].add(lblNewLabel_8);
-						
-						lblNewLabel_9 = new JLabel("입찰 횟수 : ");
-						lblNewLabel_9.setBounds(847, 36, 143, 24);
-						panel_3[i].add(lblNewLabel_9);
-						
-						JButton details = new JButton("상세 보기");
-						details.setName(Integer.toString(i));
-						details.setBounds(847, 70, 143, 35);
-						panel_3[i].add(details);
-						details.addActionListener(e->{
-//						if (panel_3[taget].getName().equals(String.valueOf(taget))) {
-//							Thedetails det = new Thedetails(getItemList(), taget);
-							if(Integer.parseInt(a.getText())*5-5 == Integer.parseInt(details.getName())) {
-								Thedetails det = new Thedetails(getItemList(), Integer.parseInt(a.getText())*5-5);
-								det.setVisible(true);
-							}else if(Integer.parseInt(a.getText())*5-4 == Integer.parseInt(details.getName())) {
-								Thedetails det = new Thedetails(getItemList(), Integer.parseInt(a.getText())*5-4);
-								det.setVisible(true);
-							}else if(Integer.parseInt(a.getText())*5-3 == Integer.parseInt(details.getName())) {
-								Thedetails det = new Thedetails(getItemList(), Integer.parseInt(a.getText())*5-3);
-								det.setVisible(true);
-							}else if(Integer.parseInt(a.getText())*5-2 == Integer.parseInt(details.getName())) {
-								Thedetails det = new Thedetails(getItemList(), Integer.parseInt(a.getText())*5-2);
-								det.setVisible(true);
-							}else if(Integer.parseInt(a.getText())*5-1 == Integer.parseInt(details.getName())) {
-								Thedetails det = new Thedetails(getItemList(), Integer.parseInt(a.getText())*5-1);
-								det.setVisible(true);
-							}
-//							}
-						});
-					}
-				}else{
-					panel_3 = null;	//데이터 패널에 들어 있는 값 초기화
-					panel_3 = new JPanel[itemList.size()];	//데이터 패널 사이즈 지정
-					for (int i = Integer.parseInt(a.getText()) * 5-5; i <= Integer.parseInt(a.getText()) * 5-1; i++) {
-						panel_3[i] = new JPanel();
-						main_Board.removeAll();
-						main_Board.revalidate();
-						main_Board.repaint();
-						main_Board.setLayout(null);
-					}
-					for (int i = Integer.parseInt(a.getText()) * 5-5; i <= Integer.parseInt(a.getText()) * 5-1; i++) {
-						panel_3[i].setLayout(null);
-						panel_3[i].setBounds(0, (70 + size), 1059, 115);
-						panel_3[i].setName(Integer.toString(i));
-						result.setText("검색 결과 : " + itemList.size()+"개가 확인 되었습니다.");
-						result.setBounds(290, 0, 367, 37);
-						result.setEditable(false);
-						result.setBorder(border);
-						main_Board.add(result);
-						main_Board.setBounds(205, 100, 2118, 1454);
-						panel_3[i].setBorder(border);
-						size += 130;
-						main_Board.add(panel_3[i]);
-						con.add(main_Board);
-						main_Board.setVisible(false);
-					}
-					for(int i=Integer.parseInt(a.getText()) * 5-5; i <= Integer.parseInt(a.getText()) * 5-1; i++) {
-						ImageIcon imic = new ImageIcon();
-						imic = itemList.get(i).getImage();
-						lblNewLabel_1 = new JLabel(imic);
-						lblNewLabel_1.setBounds(0, 0, 341, 115);
-						panel_3[i].add(lblNewLabel_1);
-
-						lblNewLabel_2 = new JLabel("제목 : " + itemList.get(i).getTitle());
-						lblNewLabel_2.setBounds(353, 1, 293, 35);
-						panel_3[i].add(lblNewLabel_2);
-						
-						lblNewLabel_3 = new JLabel("시작한 가격 : " + itemList.get(i).getPrice());
-						lblNewLabel_3.setBounds(353, 46, 254, 24);
-						panel_3[i].add(lblNewLabel_3);
-						
-						lblNewLabel_4 = new JLabel("현재 최대 입찰가 : ");
-						lblNewLabel_4.setBounds(353, 83, 254, 24);
-						panel_3[i].add(lblNewLabel_4);
-						
-						lblNewLabel_5 = new JLabel("카테고리 : " + itemList.get(i).getCategory());
-						lblNewLabel_5.setBounds(658, 21, 116, 15);
-						panel_3[i].add(lblNewLabel_5);
-						
-						lblNewLabel_6 = new JLabel("시작일 : " + itemList.get(i).getStartDate());
-						lblNewLabel_6.setBounds(619, 46, 155, 24);
-						panel_3[i].add(lblNewLabel_6);
-						
-						lblNewLabel_7 = new JLabel("종료일 : " + itemList.get(i).getFinishDate());
-						lblNewLabel_7.setBounds(619, 83, 155, 24);
-						panel_3[i].add(lblNewLabel_7);
-						
-						lblNewLabel_8 = new JLabel("ID : " + itemList.get(i).getId());
-						lblNewLabel_8.setBounds(847, 6, 200, 24);
-						panel_3[i].add(lblNewLabel_8);
-						
-						lblNewLabel_9 = new JLabel("입찰 횟수 : ");
-						lblNewLabel_9.setBounds(847, 36, 143, 24);
-						panel_3[i].add(lblNewLabel_9);
-						
-						JButton details = new JButton("상세 보기");
-						details.setName(String.valueOf(i));
-						details.setBounds(847, 70, 143, 35);
-						panel_3[i].add(details);
-						details.addActionListener(e->{
-						if (Integer.parseInt(a.getText()) * 5 - 5 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(a.getText()) * 5 - 5);
-							det.setVisible(true);
-						} else if (Integer.parseInt(a.getText()) * 5 - 4 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(a.getText()) * 5 - 4);
-							det.setVisible(true);
-						} else if (Integer.parseInt(a.getText()) * 5 - 3 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(a.getText()) * 5 - 3);
-							det.setVisible(true);
-						} else if (Integer.parseInt(a.getText()) * 5 - 2 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(a.getText()) * 5 - 2);
-							det.setVisible(true);
-						} else if (Integer.parseInt(a.getText()) * 5 - 1 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(a.getText()) * 5 - 1);
-							det.setVisible(true);
-						}
-						});
-					}
-				}
-				main_Board.setVisible(true);
-		});
-		
-		board_Page.add(b);
-		b.addActionListener(e_b->{
-			int size = 0;					//데이터 패널(리스트의 상품 등록되어 있는 상품 패널)이동 값 초기화
-			if(Integer.parseInt(b.getText())*5-4 <= itemList.size() && Integer.parseInt(b.getText())*5 > itemList.size()){
+	      if(itemList.size()-(1+(5*(Integer.parseInt(a.getText())-1))) >= 0 && itemList.size()-(1+(5*(Integer.parseInt(a.getText())-1))) < 5){
 				panel_3 = null;							//데이터 패널에 들어 있는 값 초기화
 				panel_3 = new JPanel[itemList.size()];	//데이터 패널 5 값으로 지정(데이터 5개 생성 해야하므로)
 				//현재 a버튼 값을 참조하여 현재 총 데이터량은 5이하 이므로 리스트 크기 만큼 반복문
 				//-> 새로운 패널 배열 생성, 오른쪽 메인 패널 초기화
-				for(int i=Integer.parseInt(b.getText())*5-5; i<itemList.size(); i++) {
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)); i>=0; i--) {
 					panel_3[i] = new JPanel();		//새로운 패널을 패널 배열 순서 대로 생성
 					main_Board.removeAll();			//메인 패널에 있는 값 삭제	
 					main_Board.revalidate();		//메인 패널 재정의		
@@ -738,7 +355,220 @@ public class Menu extends JFrame implements ActionListener{
 				}
 				//-> 데이터 패널 값 초기화, 데이터 패널 테두리 생성, 데이터 패널 이동 값, 메인 패널에 데이터 패널 추가
 				//-> 컨테이너 패널에 메인 패널 추가
-				for(int i=Integer.parseInt(b.getText())*5-5; i<itemList.size(); i++) {
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)); i>=0; i--) {
+					panel_3[i].setLayout(null);		//데이터 패널 위치, 크기 설정이므로 null
+					panel_3[i].setBorder(border);	//데이터 패널 테두리 설정
+					panel_3[i].setBounds(0, (70+panel_size), 1059, 115);	//위치, 크기 설정(여기서 size는 1개씩 점점 아래로 찍기 위한 값)
+					panel_3[i].setName(Integer.toString(i));
+					result.setText("검색 결과 : " + itemList.size()+"개가 확인 되었습니다.");
+					result.setBounds(290, 0, 367, 37);
+					result.setEditable(false);
+					result.setBorder(border);
+					main_Board.add(result);
+					main_Board.setBounds(205, 100, 2118, 1454);		//메인 패널 위치, 크기 설정
+					panel_size += 130;					//위치 이동하기 위한 130씩 증가 값 지정
+					main_Board.add(panel_3[i]);		//이동한 데이터 패널을 메인 패널에 생성		
+					con.add(main_Board);			//컨테이너에 메인 패널 생성
+					main_Board.setVisible(false);
+				}
+				//-> 아이템 리스트 값에 있는 데이터들을 하나의 데이터 패널안에 추가
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)); i>=0; i--) {
+					//이미지, 제목 라벨, 시작한 가격 라벨, 현재 최대 입찰가 라벨 등등... 
+					//-> 데이터 패널 배열에 새롭게 생성
+					//-> a,b,c,d,e 버튼 액션은 모두 동일
+					
+					ImageIcon imic = new ImageIcon();
+					imic = itemList.get(i).getImage();
+					int imageH = imic.getIconWidth();
+					int imageW = imic.getIconHeight();
+					int w = (115*imageW) / imageH;
+					int h = (115*imageH) / imageW;
+					
+					ImageIcon changeIcon = new ImageIcon(imic.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+					
+					lblNewLabel_1 = new JLabel(changeIcon);
+					lblNewLabel_1.setBounds(0, 0, 341, 115);
+					panel_3[i].add(lblNewLabel_1);
+
+					lblNewLabel_2 = new JLabel("제목 : " + itemList.get(i).getTitle());
+					lblNewLabel_2.setBounds(353, 1, 293, 35);
+					panel_3[i].add(lblNewLabel_2);
+					
+					lblNewLabel_3 = new JLabel("시작한 가격 : " + itemList.get(i).getPrice());
+					lblNewLabel_3.setBounds(353, 46, 254, 24);
+					panel_3[i].add(lblNewLabel_3);
+					
+					lblNewLabel_4 = new JLabel("현재 최대 입찰가 : ");
+					lblNewLabel_4.setBounds(353, 83, 254, 24);
+					panel_3[i].add(lblNewLabel_4);
+					
+					lblNewLabel_5 = new JLabel("카테고리 : " + itemList.get(i).getCategory());
+					lblNewLabel_5.setBounds(658, 21, 116, 15);
+					panel_3[i].add(lblNewLabel_5);
+					
+					lblNewLabel_6 = new JLabel("시작일 : " + itemList.get(i).getStartDate());
+					lblNewLabel_6.setBounds(619, 46, 155, 24);
+					panel_3[i].add(lblNewLabel_6);
+					
+					lblNewLabel_7 = new JLabel("종료일 : " + itemList.get(i).getFinishDate());
+					lblNewLabel_7.setBounds(619, 83, 155, 24);
+					panel_3[i].add(lblNewLabel_7);
+					
+					lblNewLabel_8 = new JLabel("ID : " + itemList.get(i).getId());
+					lblNewLabel_8.setBounds(847, 6, 200, 24);
+					panel_3[i].add(lblNewLabel_8);
+					
+					lblNewLabel_9 = new JLabel("입찰 횟수 : ");
+					lblNewLabel_9.setBounds(847, 36, 143, 24);
+					panel_3[i].add(lblNewLabel_9);
+					
+					JButton details = new JButton("상세 보기");
+					details.setName(Integer.toString(i));
+					details.setBounds(847, 70, 143, 35);
+					panel_3[i].add(details);
+					details.addActionListener(e->{
+//					if (panel_3[taget].getName().equals(String.valueOf(taget))) {
+//						Thedetails det = new Thedetails(getItemList(), taget);
+						if(itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)));
+							det.setVisible(true);
+						}else if(itemList.size()-2-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-2-(5*(Integer.parseInt(a.getText())-1)));
+							det.setVisible(true);
+						}else if(itemList.size()-3-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-3-(5*(Integer.parseInt(a.getText())-1)));
+							det.setVisible(true);
+						}else if(itemList.size()-4-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-4-(5*(Integer.parseInt(a.getText())-1)));
+							det.setVisible(true);
+						}else if(itemList.size()-5-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-5-(5*(Integer.parseInt(a.getText())-1)));
+							det.setVisible(true);
+						}
+//						}
+					});
+				}
+			}else{
+				panel_3 = null;	//데이터 패널에 들어 있는 값 초기화
+				panel_3 = new JPanel[itemList.size()];	//데이터 패널 사이즈 지정
+				for (int i = itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)); i >= itemList.size()-(5*Integer.parseInt(a.getText())); i--) {
+					panel_3[i] = new JPanel();
+					main_Board.removeAll();
+					main_Board.revalidate();
+					main_Board.repaint();
+					main_Board.setLayout(null);
+				}
+				for (int i = itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)); i >= itemList.size()-(5*Integer.parseInt(a.getText())); i--) {
+					panel_3[i].setLayout(null);
+					panel_3[i].setBounds(0, (70 + panel_size), 1059, 115);
+					panel_3[i].setName(Integer.toString(i));
+					result.setText("검색 결과 : " + itemList.size()+"개가 확인 되었습니다.");
+					result.setBounds(290, 0, 367, 37);
+					result.setEditable(false);
+					result.setBorder(border);
+					main_Board.add(result);
+					main_Board.setBounds(205, 100, 2118, 1454);
+					panel_3[i].setBorder(border);
+					panel_size += 130;
+					main_Board.add(panel_3[i]);
+					con.add(main_Board);
+					main_Board.setVisible(false);
+				}
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)); i >= itemList.size()-(5*Integer.parseInt(a.getText())); i--) {
+					
+					ImageIcon imic = new ImageIcon();
+					imic = itemList.get(i).getImage();
+					int imageH = imic.getIconWidth();
+					int imageW = imic.getIconHeight();
+					int w = (115*imageW) / imageH;
+					int h = (115*imageH) / imageW;
+					
+					ImageIcon changeIcon = new ImageIcon(imic.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+					
+					lblNewLabel_1 = new JLabel(changeIcon);
+					lblNewLabel_1.setBounds(0, 0, 341, 115);
+					panel_3[i].add(lblNewLabel_1);
+
+					lblNewLabel_2 = new JLabel("제목 : " + itemList.get(i).getTitle());
+					lblNewLabel_2.setBounds(353, 1, 293, 35);
+					panel_3[i].add(lblNewLabel_2);
+					
+					lblNewLabel_3 = new JLabel("시작한 가격 : " + itemList.get(i).getPrice());
+					lblNewLabel_3.setBounds(353, 46, 254, 24);
+					panel_3[i].add(lblNewLabel_3);
+					
+					lblNewLabel_4 = new JLabel("현재 최대 입찰가 : ");
+					lblNewLabel_4.setBounds(353, 83, 254, 24);
+					panel_3[i].add(lblNewLabel_4);
+					
+					lblNewLabel_5 = new JLabel("카테고리 : " + itemList.get(i).getCategory());
+					lblNewLabel_5.setBounds(658, 21, 116, 15);
+					panel_3[i].add(lblNewLabel_5);
+					
+					lblNewLabel_6 = new JLabel("시작일 : " + itemList.get(i).getStartDate());
+					lblNewLabel_6.setBounds(619, 46, 155, 24);
+					panel_3[i].add(lblNewLabel_6);
+					
+					lblNewLabel_7 = new JLabel("종료일 : " + itemList.get(i).getFinishDate());
+					lblNewLabel_7.setBounds(619, 83, 155, 24);
+					panel_3[i].add(lblNewLabel_7);
+					
+					lblNewLabel_8 = new JLabel("ID : " + itemList.get(i).getId());
+					lblNewLabel_8.setBounds(847, 6, 200, 24);
+					panel_3[i].add(lblNewLabel_8);
+					
+					lblNewLabel_9 = new JLabel("입찰 횟수 : ");
+					lblNewLabel_9.setBounds(847, 36, 143, 24);
+					panel_3[i].add(lblNewLabel_9);
+					
+					JButton details = new JButton("상세 보기");
+					details.setName(String.valueOf(i));
+					details.setBounds(847, 70, 143, 35);
+					panel_3[i].add(details);
+					details.addActionListener(e->{
+						if(itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)));
+							det.setVisible(true);
+						}else if(itemList.size()-2-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-2-(5*(Integer.parseInt(a.getText())-1)));
+							det.setVisible(true);
+						}else if(itemList.size()-3-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-3-(5*(Integer.parseInt(a.getText())-1)));
+							det.setVisible(true);
+						}else if(itemList.size()-4-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-4-(5*(Integer.parseInt(a.getText())-1)));
+							det.setVisible(true);
+						}else if(itemList.size()-5-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-5-(5*(Integer.parseInt(a.getText())-1)));
+							det.setVisible(true);
+						}
+					});
+				}
+			}
+			main_Board.setVisible(true);
+		
+		board_Page.add(a);
+		a.addActionListener(e_a->{
+			int size = 0;					//데이터 패널(리스트의 상품 등록되어 있는 상품 패널)이동 값 초기화
+			if(itemList.size() <= 0) {		
+				JOptionPane.showMessageDialog(null, "데이터가 없습니다.", "경고 !", JOptionPane.WARNING_MESSAGE);
+			}	
+			//데이터 리스트 값이 5이하의 값만 존재 할 경우
+			else if(itemList.size()-(1+(5*(Integer.parseInt(a.getText())-1))) >= 0 && itemList.size()-(1+(5*(Integer.parseInt(a.getText())-1))) < 5){
+				panel_3 = null;							//데이터 패널에 들어 있는 값 초기화
+				panel_3 = new JPanel[itemList.size()];	//데이터 패널 5 값으로 지정(데이터 5개 생성 해야하므로)
+				//현재 a버튼 값을 참조하여 현재 총 데이터량은 5이하 이므로 리스트 크기 만큼 반복문
+				//-> 새로운 패널 배열 생성, 오른쪽 메인 패널 초기화
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)); i>=0; i--) {
+					panel_3[i] = new JPanel();		//새로운 패널을 패널 배열 순서 대로 생성
+					main_Board.removeAll();			//메인 패널에 있는 값 삭제	
+					main_Board.revalidate();		//메인 패널 재정의		
+					main_Board.repaint();			//메인 패널 재 생성
+					main_Board.setLayout(null);
+				}
+				//-> 데이터 패널 값 초기화, 데이터 패널 테두리 생성, 데이터 패널 이동 값, 메인 패널에 데이터 패널 추가
+				//-> 컨테이너 패널에 메인 패널 추가
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)); i>=0; i--) {
 					panel_3[i].setLayout(null);		//데이터 패널 위치, 크기 설정이므로 null
 					panel_3[i].setBorder(border);	//데이터 패널 테두리 설정
 					panel_3[i].setBounds(0, (70+size), 1059, 115);	//위치, 크기 설정(여기서 size는 1개씩 점점 아래로 찍기 위한 값)
@@ -755,13 +585,118 @@ public class Menu extends JFrame implements ActionListener{
 					main_Board.setVisible(false);
 				}
 				//-> 아이템 리스트 값에 있는 데이터들을 하나의 데이터 패널안에 추가
-				for(int i=Integer.parseInt(b.getText())*5-5; i<itemList.size(); i++) {
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)); i>=0; i--) {
 					//이미지, 제목 라벨, 시작한 가격 라벨, 현재 최대 입찰가 라벨 등등... 
 					//-> 데이터 패널 배열에 새롭게 생성
 					//-> a,b,c,d,e 버튼 액션은 모두 동일
 					ImageIcon imic = new ImageIcon();
 					imic = itemList.get(i).getImage();
-					lblNewLabel_1 = new JLabel(imic);
+					int imageH = imic.getIconWidth();
+					int imageW = imic.getIconHeight();
+					int w = (115*imageW) / imageH;
+					int h = (115*imageH) / imageW;
+					
+					ImageIcon changeIcon = new ImageIcon(imic.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+					
+					lblNewLabel_1 = new JLabel(changeIcon);
+					lblNewLabel_1.setBounds(0, 0, 341, 115);
+					panel_3[i].add(lblNewLabel_1);
+
+					lblNewLabel_2 = new JLabel("제목 : " + itemList.get(i).getTitle());
+					lblNewLabel_2.setBounds(353, 1, 293, 35);
+					panel_3[i].add(lblNewLabel_2);
+					
+					lblNewLabel_3 = new JLabel("시작한 가격 : " + itemList.get(i).getPrice());
+					lblNewLabel_3.setBounds(353, 46, 254, 24);
+					panel_3[i].add(lblNewLabel_3);
+					
+					lblNewLabel_4 = new JLabel("현재 최대 입찰가 : ");
+					lblNewLabel_4.setBounds(353, 83, 254, 24);
+					panel_3[i].add(lblNewLabel_4);
+					
+					lblNewLabel_5 = new JLabel("카테고리 : " + itemList.get(i).getCategory());
+					lblNewLabel_5.setBounds(658, 21, 116, 15);
+					panel_3[i].add(lblNewLabel_5);
+					
+					lblNewLabel_6 = new JLabel("시작일 : " + itemList.get(i).getStartDate());
+					lblNewLabel_6.setBounds(619, 46, 155, 24);
+					panel_3[i].add(lblNewLabel_6);
+					
+					lblNewLabel_7 = new JLabel("종료일 : " + itemList.get(i).getFinishDate());
+					lblNewLabel_7.setBounds(619, 83, 155, 24);
+					panel_3[i].add(lblNewLabel_7);
+					
+					lblNewLabel_8 = new JLabel("ID : " + itemList.get(i).getId());
+					lblNewLabel_8.setBounds(847, 6, 200, 24);
+					panel_3[i].add(lblNewLabel_8);
+					
+					lblNewLabel_9 = new JLabel("입찰 횟수 : ");
+					lblNewLabel_9.setBounds(847, 36, 143, 24);
+					panel_3[i].add(lblNewLabel_9);
+					
+					JButton details = new JButton("상세 보기");
+					details.setName(Integer.toString(i));
+					details.setBounds(847, 70, 143, 35);
+					panel_3[i].add(details);
+					details.addActionListener(e->{
+//					if (panel_3[taget].getName().equals(String.valueOf(taget))) {
+//						Thedetails det = new Thedetails(getItemList(), taget);
+						if(itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)));
+							det.setVisible(true);
+						}else if(itemList.size()-2-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-2-(5*(Integer.parseInt(a.getText())-1)));
+							det.setVisible(true);
+						}else if(itemList.size()-3-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-3-(5*(Integer.parseInt(a.getText())-1)));
+							det.setVisible(true);
+						}else if(itemList.size()-4-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-4-(5*(Integer.parseInt(a.getText())-1)));
+							det.setVisible(true);
+						}else if(itemList.size()-5-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-5-(5*(Integer.parseInt(a.getText())-1)));
+							det.setVisible(true);
+						}
+//						}
+					});
+				}
+			}else{
+				panel_3 = null;	//데이터 패널에 들어 있는 값 초기화
+				panel_3 = new JPanel[itemList.size()];	//데이터 패널 사이즈 지정
+				for (int i = itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)); i >= itemList.size()-(5*Integer.parseInt(a.getText())); i--) {
+					panel_3[i] = new JPanel();
+					main_Board.removeAll();
+					main_Board.revalidate();
+					main_Board.repaint();
+					main_Board.setLayout(null);
+				}
+				for (int i = itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)); i >= itemList.size()-(5*Integer.parseInt(a.getText())); i--) {
+					panel_3[i].setLayout(null);
+					panel_3[i].setBounds(0, (70 + size), 1059, 115);
+					panel_3[i].setName(Integer.toString(i));
+					result.setText("검색 결과 : " + itemList.size()+"개가 확인 되었습니다.");
+					result.setBounds(290, 0, 367, 37);
+					result.setEditable(false);
+					result.setBorder(border);
+					main_Board.add(result);
+					main_Board.setBounds(205, 100, 2118, 1454);
+					panel_3[i].setBorder(border);
+					size += 130;
+					main_Board.add(panel_3[i]);
+					con.add(main_Board);
+					main_Board.setVisible(false);
+				}
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)); i >= itemList.size()-(5*Integer.parseInt(a.getText())); i--) {
+					ImageIcon imic = new ImageIcon();
+					imic = itemList.get(i).getImage();
+					int imageH = imic.getIconWidth();
+					int imageW = imic.getIconHeight();
+					int w = (imageW*115) / imageH;
+					int h = (imageH*115) / imageW;
+					
+					ImageIcon changeIcon = new ImageIcon(imic.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+					
+					lblNewLabel_1 = new JLabel(changeIcon);
 					lblNewLabel_1.setBounds(0, 0, 341, 115);
 					panel_3[i].add(lblNewLabel_1);
 
@@ -802,20 +737,130 @@ public class Menu extends JFrame implements ActionListener{
 					details.setBounds(847, 70, 143, 35);
 					panel_3[i].add(details);
 					details.addActionListener(e->{
-						if(Integer.parseInt(b.getText())*5-5 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(b.getText())*5-5);
+						if(itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-1-(5*(Integer.parseInt(a.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(b.getText())*5-4 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(b.getText())*5-4);
+						}else if(itemList.size()-2-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-2-(5*(Integer.parseInt(a.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(b.getText())*5-3 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(b.getText())*5-3);
+						}else if(itemList.size()-3-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-3-(5*(Integer.parseInt(a.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(b.getText())*5-2 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(b.getText())*5-2);
+						}else if(itemList.size()-4-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-4-(5*(Integer.parseInt(a.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(b.getText())*5-1 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(b.getText())*5-1);
+						}else if(itemList.size()-5-(5*(Integer.parseInt(a.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-5-(5*(Integer.parseInt(a.getText())-1)));
+							det.setVisible(true);
+						}
+					});
+				}
+			}
+			main_Board.setVisible(true);
+	});
+		
+		board_Page.add(b);
+		b.addActionListener(e_b->{
+			int size = 0;					//데이터 패널(리스트의 상품 등록되어 있는 상품 패널)이동 값 초기화
+			if(itemList.size()-(1+(5*(Integer.parseInt(b.getText())-1))) >= 0 && itemList.size()-(1+(5*(Integer.parseInt(b.getText())-1))) < 5){
+				panel_3 = null;							//데이터 패널에 들어 있는 값 초기화
+				panel_3 = new JPanel[itemList.size()];	//데이터 패널 5 값으로 지정(데이터 5개 생성 해야하므로)
+				//현재 a버튼 값을 참조하여 현재 총 데이터량은 5이하 이므로 리스트 크기 만큼 반복문
+				//-> 새로운 패널 배열 생성, 오른쪽 메인 패널 초기화
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(b.getText())-1)); i>=0; i--) {
+					panel_3[i] = new JPanel();		//새로운 패널을 패널 배열 순서 대로 생성
+					main_Board.removeAll();			//메인 패널에 있는 값 삭제	
+					main_Board.revalidate();		//메인 패널 재정의		
+					main_Board.repaint();			//메인 패널 재 생성
+					main_Board.setLayout(null);
+				}
+				//-> 데이터 패널 값 초기화, 데이터 패널 테두리 생성, 데이터 패널 이동 값, 메인 패널에 데이터 패널 추가
+				//-> 컨테이너 패널에 메인 패널 추가
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(b.getText())-1)); i>=0; i--) {
+					panel_3[i].setLayout(null);		//데이터 패널 위치, 크기 설정이므로 null
+					panel_3[i].setBorder(border);	//데이터 패널 테두리 설정
+					panel_3[i].setBounds(0, (70+size), 1059, 115);	//위치, 크기 설정(여기서 size는 1개씩 점점 아래로 찍기 위한 값)
+					panel_3[i].setName(Integer.toString(i));
+					result.setText("검색 결과 : " + itemList.size()+"개가 확인 되었습니다.");
+					result.setBounds(290, 0, 367, 37);
+					result.setEditable(false);
+					result.setBorder(border);
+					main_Board.add(result);
+					main_Board.setBounds(205, 100, 2118, 1454);		//메인 패널 위치, 크기 설정
+					size += 130;					//위치 이동하기 위한 130씩 증가 값 지정
+					main_Board.add(panel_3[i]);		//이동한 데이터 패널을 메인 패널에 생성		
+					con.add(main_Board);			//컨테이너에 메인 패널 생성
+					main_Board.setVisible(false);
+				}
+				//-> 아이템 리스트 값에 있는 데이터들을 하나의 데이터 패널안에 추가
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(b.getText())-1)); i>=0; i--) {
+					//이미지, 제목 라벨, 시작한 가격 라벨, 현재 최대 입찰가 라벨 등등... 
+					//-> 데이터 패널 배열에 새롭게 생성
+					//-> a,b,c,d,e 버튼 액션은 모두 동일
+					ImageIcon imic = new ImageIcon();
+					imic = itemList.get(i).getImage();
+					int imageH = imic.getIconWidth();
+					int imageW = imic.getIconHeight();
+					int w = (115*imageW) / imageH;
+					int h = (115*imageH) / imageW;
+					
+					ImageIcon changeIcon = new ImageIcon(imic.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+					
+					lblNewLabel_1 = new JLabel(changeIcon);
+					lblNewLabel_1.setBounds(0, 0, 341, 115);
+					panel_3[i].add(lblNewLabel_1);
+
+					lblNewLabel_2 = new JLabel("제목 : " + itemList.get(i).getTitle());
+					lblNewLabel_2.setBounds(353, 1, 293, 35);
+					panel_3[i].add(lblNewLabel_2);
+					
+					lblNewLabel_3 = new JLabel("시작한 가격 : " + itemList.get(i).getPrice());
+					lblNewLabel_3.setBounds(353, 46, 254, 24);
+					panel_3[i].add(lblNewLabel_3);
+					
+					lblNewLabel_4 = new JLabel("현재 최대 입찰가 : ");
+					lblNewLabel_4.setBounds(353, 83, 254, 24);
+					panel_3[i].add(lblNewLabel_4);
+					
+					lblNewLabel_5 = new JLabel("카테고리 : " + itemList.get(i).getCategory());
+					lblNewLabel_5.setBounds(658, 21, 116, 15);
+					panel_3[i].add(lblNewLabel_5);
+					
+					lblNewLabel_6 = new JLabel("시작일 : " + itemList.get(i).getStartDate());
+					lblNewLabel_6.setBounds(619, 46, 155, 24);
+					panel_3[i].add(lblNewLabel_6);
+					
+					lblNewLabel_7 = new JLabel("종료일 : " + itemList.get(i).getFinishDate());
+					lblNewLabel_7.setBounds(619, 83, 155, 24);
+					panel_3[i].add(lblNewLabel_7);
+					
+					lblNewLabel_8 = new JLabel("ID : " + itemList.get(i).getId());
+					lblNewLabel_8.setBounds(847, 6, 200, 24);
+					panel_3[i].add(lblNewLabel_8);
+					
+					lblNewLabel_9 = new JLabel("입찰 횟수 : ");
+					lblNewLabel_9.setBounds(847, 36, 143, 24);
+					panel_3[i].add(lblNewLabel_9);
+					
+					JButton details = new JButton("상세 보기");
+					details.setName(String.valueOf(i));
+					details.setBounds(847, 70, 143, 35);
+					panel_3[i].add(details);
+					details.addActionListener(e->{
+						if(itemList.size()-1-(5*(Integer.parseInt(b.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-1-(5*(Integer.parseInt(b.getText())-1)));
+							det.setVisible(true);
+						}else if(itemList.size()-2-(5*(Integer.parseInt(b.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-2-(5*(Integer.parseInt(b.getText())-1)));
+							det.setVisible(true);
+						}else if(itemList.size()-3-(5*(Integer.parseInt(b.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-3-(5*(Integer.parseInt(b.getText())-1)));
+							det.setVisible(true);
+						}else if(itemList.size()-4-(5*(Integer.parseInt(b.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-4-(5*(Integer.parseInt(b.getText())-1)));
+							det.setVisible(true);
+						}else if(itemList.size()-5-(5*(Integer.parseInt(b.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-5-(5*(Integer.parseInt(b.getText())-1)));
 							det.setVisible(true);
 						}
 					});
@@ -823,14 +868,14 @@ public class Menu extends JFrame implements ActionListener{
 			}else{
 				panel_3 = null;	//데이터 패널에 들어 있는 값 초기화
 				panel_3 = new JPanel[itemList.size()];	//데이터 패널 사이즈 지정
-				for (int i = Integer.parseInt(b.getText()) * 5-5; i <= Integer.parseInt(b.getText()) * 5-1; i++) {
+				for (int i = itemList.size()-1-(5*(Integer.parseInt(b.getText())-1)); i >= itemList.size()-(5*Integer.parseInt(b.getText())); i--) {
 					panel_3[i] = new JPanel();
 					main_Board.removeAll();
 					main_Board.revalidate();
 					main_Board.repaint();
 					main_Board.setLayout(null);
 				}
-				for (int i = Integer.parseInt(b.getText()) * 5-5; i <= Integer.parseInt(b.getText()) * 5-1; i++) {
+				for (int i = itemList.size()-1-(5*(Integer.parseInt(b.getText())-1)); i >= itemList.size()-(5*Integer.parseInt(b.getText())); i--) {
 					panel_3[i].setLayout(null);
 					panel_3[i].setBorder(border);
 					panel_3[i].setBounds(0, (70 + size), 1059, 115);
@@ -846,10 +891,17 @@ public class Menu extends JFrame implements ActionListener{
 					con.add(main_Board);
 					main_Board.setVisible(false);
 				}
-				for(int i=Integer.parseInt(b.getText()) * 5-5; i <= Integer.parseInt(b.getText()) * 5-1; i++) {
+				for(int i = itemList.size()-1-(5*(Integer.parseInt(b.getText())-1)); i >= itemList.size()-(5*Integer.parseInt(b.getText())); i--) {
 					ImageIcon imic = new ImageIcon();
 					imic = itemList.get(i).getImage();
-					lblNewLabel_1 = new JLabel(imic);
+					int imageH = imic.getIconWidth();
+					int imageW = imic.getIconHeight();
+					int w = (115*imageW) / imageH;
+					int h = (115*imageH) / imageW;
+					
+					ImageIcon changeIcon = new ImageIcon(imic.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+					
+					lblNewLabel_1 = new JLabel(changeIcon);
 					lblNewLabel_1.setBounds(0, 0, 341, 115);
 					panel_3[i].add(lblNewLabel_1);
 
@@ -890,20 +942,20 @@ public class Menu extends JFrame implements ActionListener{
 					details.setBounds(847, 70, 143, 35);
 					panel_3[i].add(details);
 					details.addActionListener(e->{
-						if(Integer.parseInt(b.getText())*5-5 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(b.getText())*5-5);
+						if(itemList.size()-1-(5*(Integer.parseInt(b.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-1-(5*(Integer.parseInt(b.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(b.getText())*5-4 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(b.getText())*5-4);
+						}else if(itemList.size()-2-(5*(Integer.parseInt(b.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-2-(5*(Integer.parseInt(b.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(b.getText())*5-3 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(b.getText())*5-3);
+						}else if(itemList.size()-3-(5*(Integer.parseInt(b.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-3-(5*(Integer.parseInt(b.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(b.getText())*5-2 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(b.getText())*5-2);
+						}else if(itemList.size()-4-(5*(Integer.parseInt(b.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-4-(5*(Integer.parseInt(b.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(b.getText())*5-1 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(b.getText())*5-1);
+						}else if(itemList.size()-5-(5*(Integer.parseInt(b.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-5-(5*(Integer.parseInt(b.getText())-1)));
 							det.setVisible(true);
 						}
 					});
@@ -915,12 +967,12 @@ public class Menu extends JFrame implements ActionListener{
 		board_Page.add(c);
 		c.addActionListener(e_c->{
 			int size = 0;					//데이터 패널(리스트의 상품 등록되어 있는 상품 패널)이동 값 초기화
-			if(Integer.parseInt(c.getText())*5-4 <= itemList.size() && Integer.parseInt(c.getText())*5 > itemList.size()){
+			if(itemList.size()-(1+(5*(Integer.parseInt(c.getText())-1))) >= 0 && itemList.size()-(1+(5*(Integer.parseInt(c.getText())-1))) < 5){
 				panel_3 = null;							//데이터 패널에 들어 있는 값 초기화
 				panel_3 = new JPanel[itemList.size()];	//데이터 패널 5 값으로 지정(데이터 5개 생성 해야하므로)
 				//현재 a버튼 값을 참조하여 현재 총 데이터량은 5이하 이므로 리스트 크기 만큼 반복문
 				//-> 새로운 패널 배열 생성, 오른쪽 메인 패널 초기화
-				for(int i=Integer.parseInt(c.getText())*5-5; i<itemList.size(); i++) {
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(c.getText())-1)); i>=0; i--) {
 					panel_3[i] = new JPanel();		//새로운 패널을 패널 배열 순서 대로 생성
 					main_Board.removeAll();			//메인 패널에 있는 값 삭제	
 					main_Board.revalidate();		//메인 패널 재정의		
@@ -929,7 +981,7 @@ public class Menu extends JFrame implements ActionListener{
 				}
 				//-> 데이터 패널 값 초기화, 데이터 패널 테두리 생성, 데이터 패널 이동 값, 메인 패널에 데이터 패널 추가
 				//-> 컨테이너 패널에 메인 패널 추가
-				for(int i=Integer.parseInt(c.getText())*5-5; i<itemList.size(); i++) {
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(c.getText())-1)); i>=0; i--) {
 					panel_3[i].setLayout(null);		//데이터 패널 위치, 크기 설정이므로 null
 					panel_3[i].setBorder(border);	//데이터 패널 테두리 설정
 					panel_3[i].setBounds(0, (70+size), 1059, 115);	//위치, 크기 설정(여기서 size는 1개씩 점점 아래로 찍기 위한 값)
@@ -946,13 +998,20 @@ public class Menu extends JFrame implements ActionListener{
 					main_Board.setVisible(false);
 				}
 				//-> 아이템 리스트 값에 있는 데이터들을 하나의 데이터 패널안에 추가
-				for(int i=Integer.parseInt(c.getText())*5-5; i<itemList.size(); i++) {
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(c.getText())-1)); i>=0; i--) {
 					//이미지, 제목 라벨, 시작한 가격 라벨, 현재 최대 입찰가 라벨 등등... 
 					//-> 데이터 패널 배열에 새롭게 생성
 					//-> a,b,c,d,e 버튼 액션은 모두 동일
 					ImageIcon imic = new ImageIcon();
 					imic = itemList.get(i).getImage();
-					lblNewLabel_1 = new JLabel(imic);
+					int imageH = imic.getIconWidth();
+					int imageW = imic.getIconHeight();
+					int w = (115*imageW) / imageH;
+					int h = (115*imageH) / imageW;
+					
+					ImageIcon changeIcon = new ImageIcon(imic.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+					
+					lblNewLabel_1 = new JLabel(changeIcon);
 					lblNewLabel_1.setBounds(0, 0, 341, 115);
 					panel_3[i].add(lblNewLabel_1);
 
@@ -993,35 +1052,35 @@ public class Menu extends JFrame implements ActionListener{
 					details.setBounds(847, 70, 143, 35);
 					panel_3[i].add(details);
 					details.addActionListener(e->{
-						if(Integer.parseInt(c.getText())*5-5 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(c.getText())*5-5);
+						if(itemList.size()-1-(5*(Integer.parseInt(c.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-1-(5*(Integer.parseInt(c.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(c.getText())*5-4 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(c.getText())*5-4);
+						}else if(itemList.size()-2-(5*(Integer.parseInt(c.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-2-(5*(Integer.parseInt(c.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(c.getText())*5-3 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(c.getText())*5-3);
+						}else if(itemList.size()-3-(5*(Integer.parseInt(c.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-3-(5*(Integer.parseInt(c.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(c.getText())*5-2 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(c.getText())*5-2);
+						}else if(itemList.size()-4-(5*(Integer.parseInt(c.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-4-(5*(Integer.parseInt(c.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(c.getText())*5-1 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(c.getText())*5-1);
+						}else if(itemList.size()-5-(5*(Integer.parseInt(c.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-5-(5*(Integer.parseInt(c.getText())-1)));
 							det.setVisible(true);
 						}
 					});
 				}
 			}else{
-				panel_3 = null;	//데이터 패널에 들어 있는 값 초기화
+				panel_3 = null;				//데이터 패널에 들어 있는 값 초기화
 				panel_3 = new JPanel[itemList.size()];	//데이터 패널 사이즈 지정
-				for (int i = Integer.parseInt(c.getText()) * 5-5; i <= Integer.parseInt(c.getText()) * 5-1; i++) {
+				for (int i = itemList.size()-1-(5*(Integer.parseInt(c.getText())-1)); i >= itemList.size()-(5*Integer.parseInt(c.getText())); i--) {
 					panel_3[i] = new JPanel();
 					main_Board.removeAll();
 					main_Board.revalidate();
 					main_Board.repaint();
 					main_Board.setLayout(null);
 				}
-				for (int i = Integer.parseInt(c.getText()) * 5-5; i <= Integer.parseInt(c.getText()) * 5-1; i++) {
+				for (int i = itemList.size()-1-(5*(Integer.parseInt(c.getText())-1)); i >= itemList.size()-(5*Integer.parseInt(c.getText())); i--) {
 					panel_3[i].setLayout(null);
 					panel_3[i].setBorder(border);
 					panel_3[i].setBounds(0, (70 + size), 1059, 115);
@@ -1037,10 +1096,17 @@ public class Menu extends JFrame implements ActionListener{
 					con.add(main_Board);
 					main_Board.setVisible(false);
 				}
-				for(int i=Integer.parseInt(c.getText()) * 5-5; i <= Integer.parseInt(c.getText()) * 5-1; i++) {
+				for(int i = itemList.size()-1-(5*(Integer.parseInt(c.getText())-1)); i >= itemList.size()-(5*Integer.parseInt(c.getText())); i--) {
 					ImageIcon imic = new ImageIcon();
 					imic = itemList.get(i).getImage();
-					lblNewLabel_1 = new JLabel(imic);
+					int imageH = imic.getIconWidth();
+					int imageW = imic.getIconHeight();
+					int w = (115*imageW) / imageH;
+					int h = (115*imageH) / imageW;
+					
+					ImageIcon changeIcon = new ImageIcon(imic.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+					
+					lblNewLabel_1 = new JLabel(changeIcon);
 					lblNewLabel_1.setBounds(0, 0, 341, 115);
 					panel_3[i].add(lblNewLabel_1);
 
@@ -1081,20 +1147,20 @@ public class Menu extends JFrame implements ActionListener{
 					details.setBounds(847, 70, 143, 35);
 					panel_3[i].add(details);
 					details.addActionListener(e->{
-						if(Integer.parseInt(c.getText())*5-5 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(c.getText())*5-5);
+						if(itemList.size()-1-(5*(Integer.parseInt(c.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-1-(5*(Integer.parseInt(c.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(c.getText())*5-4 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(c.getText())*5-4);
+						}else if(itemList.size()-2-(5*(Integer.parseInt(c.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-2-(5*(Integer.parseInt(c.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(c.getText())*5-3 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(c.getText())*5-3);
+						}else if(itemList.size()-3-(5*(Integer.parseInt(c.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-3-(5*(Integer.parseInt(c.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(c.getText())*5-2 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(c.getText())*5-2);
+						}else if(itemList.size()-4-(5*(Integer.parseInt(c.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-4-(5*(Integer.parseInt(c.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(c.getText())*5-1 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(c.getText())*5-1);
+						}else if(itemList.size()-5-(5*(Integer.parseInt(c.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-5-(5*(Integer.parseInt(c.getText())-1)));
 							det.setVisible(true);
 						}
 					});
@@ -1106,12 +1172,12 @@ public class Menu extends JFrame implements ActionListener{
 		board_Page.add(d);
 		d.addActionListener(e_d->{
 			int size = 0;					//데이터 패널(리스트의 상품 등록되어 있는 상품 패널)이동 값 초기화
-			if(Integer.parseInt(d.getText())*5-4 <= itemList.size() && Integer.parseInt(d.getText())*5 > itemList.size()){
+			if(itemList.size()-(1+(5*(Integer.parseInt(d.getText())-1))) >= 0 && itemList.size()-(1+(5*(Integer.parseInt(d.getText())-1))) < 5){
 				panel_3 = null;							//데이터 패널에 들어 있는 값 초기화
 				panel_3 = new JPanel[itemList.size()];	//데이터 패널 5 값으로 지정(데이터 5개 생성 해야하므로)
 				//현재 a버튼 값을 참조하여 현재 총 데이터량은 5이하 이므로 리스트 크기 만큼 반복문
 				//-> 새로운 패널 배열 생성, 오른쪽 메인 패널 초기화
-				for(int i=Integer.parseInt(d.getText())*5-5; i<itemList.size(); i++) {
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(d.getText())-1)); i>=0; i--) {
 					panel_3[i] = new JPanel();		//새로운 패널을 패널 배열 순서 대로 생성
 					main_Board.removeAll();			//메인 패널에 있는 값 삭제	
 					main_Board.revalidate();		//메인 패널 재정의		
@@ -1120,7 +1186,7 @@ public class Menu extends JFrame implements ActionListener{
 				}
 				//-> 데이터 패널 값 초기화, 데이터 패널 테두리 생성, 데이터 패널 이동 값, 메인 패널에 데이터 패널 추가
 				//-> 컨테이너 패널에 메인 패널 추가
-				for(int i=Integer.parseInt(d.getText())*5-5; i<itemList.size(); i++) {
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(d.getText())-1)); i>=0; i--) {
 					panel_3[i].setLayout(null);		//데이터 패널 위치, 크기 설정이므로 null
 					panel_3[i].setBorder(border);	//데이터 패널 테두리 설정
 					panel_3[i].setBounds(0, (70+size), 1059, 115);	//위치, 크기 설정(여기서 size는 1개씩 점점 아래로 찍기 위한 값)
@@ -1137,13 +1203,20 @@ public class Menu extends JFrame implements ActionListener{
 					main_Board.setVisible(false);
 				}
 				//-> 아이템 리스트 값에 있는 데이터들을 하나의 데이터 패널안에 추가
-				for(int i=Integer.parseInt(d.getText())*5-5; i<itemList.size(); i++) {
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(d.getText())-1)); i>=0; i--) {
 					//이미지, 제목 라벨, 시작한 가격 라벨, 현재 최대 입찰가 라벨 등등... 
 					//-> 데이터 패널 배열에 새롭게 생성
 					//-> a,b,c,d,e 버튼 액션은 모두 동일
 					ImageIcon imic = new ImageIcon();
 					imic = itemList.get(i).getImage();
-					lblNewLabel_1 = new JLabel(imic);
+					int imageH = imic.getIconWidth();
+					int imageW = imic.getIconHeight();
+					int w = (115*imageW) / imageH;
+					int h = (115*imageH) / imageW;
+					
+					ImageIcon changeIcon = new ImageIcon(imic.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+					
+					lblNewLabel_1 = new JLabel(changeIcon);
 					lblNewLabel_1.setBounds(0, 0, 341, 115);
 					panel_3[i].add(lblNewLabel_1);
 
@@ -1184,35 +1257,35 @@ public class Menu extends JFrame implements ActionListener{
 					details.setBounds(847, 70, 143, 35);
 					panel_3[i].add(details);
 					details.addActionListener(e->{
-						if(Integer.parseInt(d.getText())*5-5 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(d.getText())*5-5);
+						if(itemList.size()-1-(5*(Integer.parseInt(d.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-1-(5*(Integer.parseInt(d.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(d.getText())*5-4 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(d.getText())*5-4);
+						}else if(itemList.size()-2-(5*(Integer.parseInt(d.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-2-(5*(Integer.parseInt(d.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(d.getText())*5-3 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(d.getText())*5-3);
+						}else if(itemList.size()-3-(5*(Integer.parseInt(d.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-3-(5*(Integer.parseInt(d.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(d.getText())*5-2 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(d.getText())*5-2);
+						}else if(itemList.size()-4-(5*(Integer.parseInt(d.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-4-(5*(Integer.parseInt(d.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(d.getText())*5-1 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(d.getText())*5-1);
+						}else if(itemList.size()-5-(5*(Integer.parseInt(d.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-5-(5*(Integer.parseInt(d.getText())-1)));
 							det.setVisible(true);
 						}
 					});
 				}
 			}else{
 				panel_3 = null;	//데이터 패널에 들어 있는 값 초기화
-				panel_3 = new JPanel[itemList.size()];	//데이터 패널 사이즈 지정
-				for (int i = Integer.parseInt(d.getText()) * 5-5; i <= Integer.parseInt(d.getText()) * 5-1; i++) {
+				panel_3 = new JPanel[5];	//데이터 패널 사이즈 지정
+				for (int i=itemList.size()-1-(5*(Integer.parseInt(d.getText())-1)); i>=itemList.size()-(5*Integer.parseInt(d.getText())); i--) {
 					panel_3[i] = new JPanel();
 					main_Board.removeAll();
 					main_Board.revalidate();
 					main_Board.repaint();
 					main_Board.setLayout(null);
 				}
-				for (int i = Integer.parseInt(d.getText()) * 5-5; i <= Integer.parseInt(d.getText()) * 5-1; i++) {
+				for (int i=itemList.size()-1-(5*(Integer.parseInt(d.getText())-1)); i>=itemList.size()-(5*Integer.parseInt(d.getText())); i--) {
 					panel_3[i].setLayout(null);
 					panel_3[i].setBorder(border);
 					panel_3[i].setBounds(0, (70 + size), 1059, 115);
@@ -1228,10 +1301,17 @@ public class Menu extends JFrame implements ActionListener{
 					con.add(main_Board);
 					main_Board.setVisible(false);
 				}
-				for(int i=Integer.parseInt(d.getText()) * 5-5; i <= Integer.parseInt(d.getText()) * 5-1; i++) {
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(d.getText())-1)); i>=itemList.size()-(5*Integer.parseInt(d.getText())); i--) {
 					ImageIcon imic = new ImageIcon();
 					imic = itemList.get(i).getImage();
-					lblNewLabel_1 = new JLabel(imic);
+					int imageH = imic.getIconWidth();
+					int imageW = imic.getIconHeight();
+					int w = (115*imageW) / imageH;
+					int h = (115*imageH) / imageW;
+					
+					ImageIcon changeIcon = new ImageIcon(imic.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+					
+					lblNewLabel_1 = new JLabel(changeIcon);
 					lblNewLabel_1.setBounds(0, 0, 341, 115);
 					panel_3[i].add(lblNewLabel_1);
 
@@ -1272,20 +1352,20 @@ public class Menu extends JFrame implements ActionListener{
 					details.setBounds(847, 70, 143, 35);
 					panel_3[i].add(details);
 					details.addActionListener(e->{
-						if(Integer.parseInt(d.getText())*5-5 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(d.getText())*5-5);
+						if(itemList.size()-1-(5*(Integer.parseInt(d.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-1-(5*(Integer.parseInt(d.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(d.getText())*5-4 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(d.getText())*5-4);
+						}else if(itemList.size()-2-(5*(Integer.parseInt(d.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-2-(5*(Integer.parseInt(d.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(d.getText())*5-3 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(d.getText())*5-3);
+						}else if(itemList.size()-3-(5*(Integer.parseInt(d.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-3-(5*(Integer.parseInt(d.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(d.getText())*5-2 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(d.getText())*5-2);
+						}else if(itemList.size()-4-(5*(Integer.parseInt(d.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-4-(5*(Integer.parseInt(d.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(d.getText())*5-1 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(d.getText())*5-1);
+						}else if(itemList.size()-5-(5*(Integer.parseInt(d.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-5-(5*(Integer.parseInt(d.getText())-1)));
 							det.setVisible(true);
 						}
 					});
@@ -1297,12 +1377,12 @@ public class Menu extends JFrame implements ActionListener{
 		board_Page.add(e);
 		e.addActionListener(e_e->{
 			int size = 0;					//데이터 패널(리스트의 상품 등록되어 있는 상품 패널)이동 값 초기화
-			if(Integer.parseInt(e.getText())*5-4 <= itemList.size() && Integer.parseInt(e.getText())*5 > itemList.size()){
+			if(itemList.size()-(1+(5*(Integer.parseInt(e.getText())-1))) >= 0 && itemList.size()-(1+(5*(Integer.parseInt(e.getText())-1))) < 5){
 				panel_3 = null;							//데이터 패널에 들어 있는 값 초기화
 				panel_3 = new JPanel[itemList.size()];	//데이터 패널 5 값으로 지정(데이터 5개 생성 해야하므로)
 				//현재 a버튼 값을 참조하여 현재 총 데이터량은 5이하 이므로 리스트 크기 만큼 반복문
 				//-> 새로운 패널 배열 생성, 오른쪽 메인 패널 초기화
-				for(int i=Integer.parseInt(e.getText())*5-5; i<itemList.size(); i++) {
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(e.getText())-1)); i>=0; i--) {
 					panel_3[i] = new JPanel();		//새로운 패널을 패널 배열 순서 대로 생성
 					main_Board.removeAll();			//메인 패널에 있는 값 삭제	
 					main_Board.revalidate();		//메인 패널 재정의		
@@ -1311,7 +1391,7 @@ public class Menu extends JFrame implements ActionListener{
 				}
 				//-> 데이터 패널 값 초기화, 데이터 패널 테두리 생성, 데이터 패널 이동 값, 메인 패널에 데이터 패널 추가
 				//-> 컨테이너 패널에 메인 패널 추가
-				for(int i=Integer.parseInt(e.getText())*5-5; i<itemList.size(); i++) {
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(e.getText())-1)); i>=0; i--) {
 					panel_3[i].setLayout(null);		//데이터 패널 위치, 크기 설정이므로 null
 					panel_3[i].setBorder(border);	//데이터 패널 테두리 설정
 					panel_3[i].setBounds(0, (70+size), 1059, 115);	//위치, 크기 설정(여기서 size는 1개씩 점점 아래로 찍기 위한 값)
@@ -1328,13 +1408,20 @@ public class Menu extends JFrame implements ActionListener{
 					main_Board.setVisible(false);
 				}
 				//-> 아이템 리스트 값에 있는 데이터들을 하나의 데이터 패널안에 추가
-				for(int i=Integer.parseInt(e.getText())*5-5; i<itemList.size(); i++) {
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(e.getText())-1)); i>=0; i--) {
 					//이미지, 제목 라벨, 시작한 가격 라벨, 현재 최대 입찰가 라벨 등등... 
 					//-> 데이터 패널 배열에 새롭게 생성
 					//-> a,b,c,d,e 버튼 액션은 모두 동일
 					ImageIcon imic = new ImageIcon();
 					imic = itemList.get(i).getImage();
-					lblNewLabel_1 = new JLabel(imic);
+					int imageH = imic.getIconWidth();
+					int imageW = imic.getIconHeight();
+					int w = (115*imageW) / imageH;
+					int h = (115*imageH) / imageW;
+					
+					ImageIcon changeIcon = new ImageIcon(imic.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+					
+					lblNewLabel_1 = new JLabel(changeIcon);
 					lblNewLabel_1.setBounds(0, 0, 341, 115);
 					panel_3[i].add(lblNewLabel_1);
 
@@ -1375,35 +1462,35 @@ public class Menu extends JFrame implements ActionListener{
 					details.setBounds(847, 70, 143, 35);
 					panel_3[i].add(details);
 					details.addActionListener(el->{
-						if(Integer.parseInt(e.getText())*5-5 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(e.getText())*5-5);
+						if(itemList.size()-1-(5*(Integer.parseInt(e.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-1-(5*(Integer.parseInt(e.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(e.getText())*5-4 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(e.getText())*5-4);
+						}else if(itemList.size()-2-(5*(Integer.parseInt(e.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-2-(5*(Integer.parseInt(e.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(e.getText())*5-3 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(e.getText())*5-3);
+						}else if(itemList.size()-3-(5*(Integer.parseInt(e.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-3-(5*(Integer.parseInt(e.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(e.getText())*5-2 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(e.getText())*5-2);
+						}else if(itemList.size()-4-(5*(Integer.parseInt(e.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-4-(5*(Integer.parseInt(e.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(e.getText())*5-1 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(e.getText())*5-1);
+						}else if(itemList.size()-5-(5*(Integer.parseInt(e.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-5-(5*(Integer.parseInt(e.getText())-1)));
 							det.setVisible(true);
 						}
 					});
 				}
 			}else{
 				panel_3 = null;	//데이터 패널에 들어 있는 값 초기화
-				panel_3 = new JPanel[itemList.size()];	//데이터 패널 사이즈 지정
-				for (int i = Integer.parseInt(e.getText()) * 5-5; i <= Integer.parseInt(e.getText()) * 5-1; i++) {
+				panel_3 = new JPanel[5];	//데이터 패널 사이즈 지정
+				for (int i=itemList.size()-1-(5*(Integer.parseInt(e.getText())-1)); i>=itemList.size()-(5*Integer.parseInt(e.getText())); i--) {
 					panel_3[i] = new JPanel();
 					main_Board.removeAll();
 					main_Board.revalidate();
 					main_Board.repaint();
 					main_Board.setLayout(null);
 				}
-				for (int i = Integer.parseInt(e.getText()) * 5-5; i <= Integer.parseInt(e.getText()) * 5-1; i++) {
+				for (int i=itemList.size()-1-(5*(Integer.parseInt(e.getText())-1)); i>=itemList.size()-(5*Integer.parseInt(e.getText())); i--) {
 					panel_3[i].setLayout(null);
 					panel_3[i].setBorder(border);
 					panel_3[i].setBounds(0, (70 + size), 1059, 115);
@@ -1419,10 +1506,17 @@ public class Menu extends JFrame implements ActionListener{
 					con.add(main_Board);
 					main_Board.setVisible(false);
 				}
-				for(int i=Integer.parseInt(e.getText()) * 5-5; i <= Integer.parseInt(e.getText()) * 5-1; i++) {
+				for(int i=itemList.size()-1-(5*(Integer.parseInt(e.getText())-1)); i>=itemList.size()-(5*Integer.parseInt(e.getText())); i--) {
 					ImageIcon imic = new ImageIcon();
 					imic = itemList.get(i).getImage();
-					lblNewLabel_1 = new JLabel(imic);
+					int imageH = imic.getIconWidth();
+					int imageW = imic.getIconHeight();
+					int w = (115*imageW) / imageH;
+					int h = (115*imageH) / imageW;
+					
+					ImageIcon changeIcon = new ImageIcon(imic.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+					
+					lblNewLabel_1 = new JLabel(changeIcon);
 					lblNewLabel_1.setBounds(0, 0, 341, 115);
 					panel_3[i].add(lblNewLabel_1);
 
@@ -1463,20 +1557,20 @@ public class Menu extends JFrame implements ActionListener{
 					details.setBounds(847, 70, 143, 35);
 					panel_3[i].add(details);
 					details.addActionListener(el->{
-						if(Integer.parseInt(e.getText())*5-5 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(e.getText())*5-5);
+						if(itemList.size()-1-(5*(Integer.parseInt(e.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-1-(5*(Integer.parseInt(e.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(e.getText())*5-4 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(e.getText())*5-4);
+						}else if(itemList.size()-2-(5*(Integer.parseInt(e.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-2-(5*(Integer.parseInt(e.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(e.getText())*5-3 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(e.getText())*5-3);
+						}else if(itemList.size()-3-(5*(Integer.parseInt(e.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-3-(5*(Integer.parseInt(e.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(e.getText())*5-2 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(e.getText())*5-2);
+						}else if(itemList.size()-4-(5*(Integer.parseInt(e.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-4-(5*(Integer.parseInt(e.getText())-1)));
 							det.setVisible(true);
-						}else if(Integer.parseInt(e.getText())*5-1 == Integer.parseInt(details.getName())) {
-							Thedetails det = new Thedetails(getItemList(), Integer.parseInt(e.getText())*5-1);
+						}else if(itemList.size()-5-(5*(Integer.parseInt(e.getText())-1)) == Integer.parseInt(details.getName())) {
+							Thedetails det = new Thedetails(getItemList(), itemList.size()-5-(5*(Integer.parseInt(e.getText())-1)));
 							det.setVisible(true);
 						}
 					});

@@ -1,29 +1,22 @@
 package project_main;
 
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
 import java.awt.Container;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.text.DecimalFormat;
+import java.text.Format;
 
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import network.Client_Function;
 import network.Item;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 
 public class Bidding extends JDialog{
 	
@@ -66,7 +59,10 @@ public class Bidding extends JDialog{
 		if(item.getBidsList().size() == 0 || item.getBidsList() == null) {
 			server_Max_Bidding = new JLabel(String.valueOf(item.getPrice()),JLabel.CENTER);
 		}else {
-			server_Max_Bidding = new JLabel(String.valueOf(item.getBidsList().get(item.getBidsList().size()-1).getBid()),JLabel.CENTER);
+			int oldPrice = item.getBidsList().get(item.getBidsList().size()-1).getBid();
+			Format f = new DecimalFormat("##,###,###,###");
+			String result = f.format(oldPrice);
+			server_Max_Bidding = new JLabel(result,JLabel.CENTER);
 		}
 		max_Bidding_Panel.setBounds(113, 27, 99, 27);
 		con.add(max_Bidding_Panel);
