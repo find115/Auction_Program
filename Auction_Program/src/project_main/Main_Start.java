@@ -159,40 +159,66 @@ class Main_Start extends JFrame implements Runnable{
 			
 			
 			
-				Runnable login_Start = new Runnable() {
-					@Override
-					public void run() {
-						while(getItemList()==null && getServer_Time()==null) {
-						}
+//				Runnable login_Start = new Runnable() {
+//					@Override
+//					public void run() {
+//						while(getItemList()==null && getServer_Time()==null) {
+//						}
+//						
+//						Client_Function function = new Client_Function();
+//						InetAddress inet = null;
+//						int port = 50000;
+//						Socket socket = null;
+//						try {
+//							inet = InetAddress.getByName("localhost");
+//						}catch(Exception e) {
+//							e.printStackTrace();
+//						}
+//						socket = function.socket_Creation(inet, port);
+//						boolean check = function.login(socket, String.valueOf(id_Input.getText()), String.valueOf(pw_Input.getPassword()));
+//						if(check) {
+//							Menu menu;
+//							try {
+//								menu = new Menu(getItemList(), getServer_Time());
+//								menu.setVisible(true);
+//							}catch(Exception err) {
+//								
+//							}
+//						}
+//						else {
+//							JOptionPane.showMessageDialog(Main_Start.this, "로그인 정보가 일치하지 않습니다.", "경고", JOptionPane.WARNING_MESSAGE);
+//						}
+//					}
+//				};
+//				Thread t = new Thread(login_Start);
+//				t.setDaemon(true);
+//				t.start();
+				
+				
+				Client_Function function = new Client_Function();
+				InetAddress inet = null;
+				int port = 50000;
+				Socket socket = null;
+				try {
+					inet = InetAddress.getByName("localhost");
+				}catch(Exception ee) {
+					ee.printStackTrace();
+				}
+				socket = function.socket_Creation(inet, port);
+				boolean check = function.login(socket, String.valueOf(id_Input.getText()), String.valueOf(pw_Input.getPassword()));
+				if(check) {
+					Menu menu;
+					try {
+						menu = new Menu(getItemList(), getServer_Time());
+						menu.setVisible(true);
+						this.setVisible(false);
+					}catch(Exception err) {
 						
-						Client_Function function = new Client_Function();
-						InetAddress inet = null;
-						int port = 50000;
-						Socket socket = null;
-						try {
-							inet = InetAddress.getByName("localhost");
-						}catch(Exception e) {
-							e.printStackTrace();
-						}
-						socket = function.socket_Creation(inet, port);
-						boolean check = function.login(socket, String.valueOf(id_Input.getText()), String.valueOf(pw_Input.getPassword()));
-						if(check) {
-							Menu menu;
-							try {
-								menu = new Menu(getItemList(), getServer_Time());
-								menu.setVisible(true);
-							}catch(Exception err) {
-								
-							}
-						}
-						else {
-							JOptionPane.showMessageDialog(Main_Start.this, "로그인 정보가 일치하지 않습니다.", "경고", JOptionPane.WARNING_MESSAGE);
-						}
 					}
-				};
-				Thread t = new Thread(login_Start);
-				t.setDaemon(true);
-				t.start();
+				}
+				else {
+					JOptionPane.showMessageDialog(Main_Start.this, "로그인 정보가 일치하지 않습니다.", "경고", JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		});
 		

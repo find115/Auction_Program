@@ -1,11 +1,8 @@
 package network;
 
-import java.net.InetAddress;
-import java.net.Socket;
-
 public class Test {
 	public static void main(String[] args) {
-		String address = "10.50.201.64";
+		String address = "localhost";
 		FileIo file = new FileIo();
 		file.fileWriter_ServerAddress(address);
 		System.out.println("¿Ï·á");
